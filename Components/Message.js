@@ -1,5 +1,5 @@
 import React, { Component, useState } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView, FlatList, TextInput } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, FlatList, TextInput, Image } from "react-native";
 
 const MESSAGES = [
     {
@@ -92,16 +92,25 @@ class Message extends React.Component {
                     />
                 </ScrollView>
                 <View style={styles.zoneNewMessage}>
-                    <View style={styles.inputText}>
+                    <ScrollView style={styles.inputText}>
                         <TextInput
                             style={{ height: 40 }}
                             placeholder="Type here to translate!"
+                            multiline= 'true'
 
                         />
-                    </View>
-                    <View>
-                        
-                    </View>
+                    </ScrollView>
+                    <TouchableOpacity
+                        style={styles.envoiButton}
+                        onPress={() => alert("Ahahahah")}>
+
+                        <View style={styles.zoneButton}>
+                            <Image
+                                source={require('../assets/iconEnvoi.png')} 
+                            />
+                        </View>
+
+                    </TouchableOpacity>
                 </View>
             </View>
 
@@ -120,8 +129,10 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         alignItems: 'flex-start',
         marginTop: 15,
-        width: 200,
+        width: 250,
         flex: 1,
+        padding: 6,
+        marginLeft: 5
     },
     alignementDroitEnvoye: {
         alignItems: 'flex-end',
@@ -131,7 +142,9 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         marginTop: 15,
         flex: 1,
-        width: 200,
+        width: 250,
+        padding: 6,
+        marginRight: 5
     },
     zoneTextMessage: {
         flex: 1,
@@ -164,14 +177,24 @@ const styles = StyleSheet.create({
         color: 'grey'
     },
     zoneNewMessage: {
-        backgroundColor: 'blue',
+        backgroundColor: 'white',
         flex: 0.1,
         borderTopWidth: 1,
         flexDirection: 'row',
     },
-    inputText:{
-        flex: 0.8,
-        backgroundColor : 'green',
+    inputText: {
+        flex: 0.7,
+        width: 100,
+    },
+    envoiButton: {
+        flex: 0.3,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    zoneButton: {
+        alignItems: 'center',
+        
     }
 });
 

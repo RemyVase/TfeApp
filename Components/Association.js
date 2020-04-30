@@ -104,7 +104,6 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         flex: 1,
         flexDirection: 'row',
-        //borderRadius: 25,
     },
     nomAssoc: {
         flex: 1,
