@@ -21,6 +21,7 @@ const AnimalSauveStack = createStackNavigator();
 const MessagerieStack = createStackNavigator();
 const AssociationStack = createStackNavigator();
 
+
 function TypeAnimalTrouveScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -82,6 +83,7 @@ function CompteStackScreen() {
   );
 }
 
+
 function AnimalSauveStackScreen() {
   return (
     <AnimalSauveStack.Navigator>
@@ -89,6 +91,7 @@ function AnimalSauveStackScreen() {
       <AnimalSauveStack.Screen name="TypeAnimalTrouveScreen" component={TypeAnimalTrouveScreen} options={{ title: 'De quel type d\'animal s\'agit t\'il ?', headerTintColor: 'white', headerStyle: { backgroundColor: '#6D071A' } }} />
       <AnimalSauveStack.Screen name="AssocChats" component={AssocChats} options={{ title: 'Associations de chats', headerTintColor: 'white', headerStyle: { backgroundColor: '#6D071A' } }} />
       <AnimalSauveStack.Screen name="AssocChiens" component={AssocChiens} options={{ title: 'Associations de chiens', headerTintColor: 'white', headerStyle: { backgroundColor: '#6D071A' } }} />
+      <AnimalSauveStack.Screen name="MessageToAssoc" component={MessageToAssoc} options={{ title: 'Message', headerTintColor: 'white', headerStyle: { backgroundColor: '#6D071A' } }} />
     </AnimalSauveStack.Navigator>
   );
 }
@@ -110,6 +113,8 @@ function AssociationStackScreen() {
     </AssociationStack.Navigator>
   );
 }
+
+
 
 function MyTabs() {
   return (

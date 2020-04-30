@@ -68,7 +68,11 @@ class AssocChiens extends React.Component {
                                     <View style={styles.zoneDesc}>
                                         <View style={styles.submitContainer}>
                                             <TouchableOpacity
-                                                onPress={() => alert("Ahahahah")}>
+                                                onPress={() => {
+                                                    this.props.navigation.navigate('MessageToAssoc', {
+                                                        ok: item.adresse
+                                                    })
+                                                }}>
                                                 <Text style={styles.submitButton}>Contacter {item.nom}</Text>
                                             </TouchableOpacity>
                                         </View>

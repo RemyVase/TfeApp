@@ -17,7 +17,7 @@ class MessageToAssoc extends React.Component {
             <View style={styles.zoneBouton}>
                 <ScrollView style={styles.zoneMessageInput}>
                     <TextInput
-                        style={{ height: 300, width: 300 }}
+                        style={{ flex:1, width: 270}}
                         placeholder="Ecrivez votre message ici !"
                         multiline= {true}
                     />
