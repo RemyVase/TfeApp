@@ -48,7 +48,7 @@ class Messagerie extends React.Component {
                                         ok: item.dernierMsg
                                     })
                                 }}>
-                                <View style={styles.caseAssoc}>
+                                <View style={styles.caseMessage}>
                                     <View style={styles.zoneNomContact}>
                                         <Text style={styles.nomContact}>{item.nom}</Text>
                                     </View>
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "600"
     },
-    caseAssoc: {
+    caseMessage: {
         alignSelf: 'stretch',
         height: 80,
         borderBottomWidth: 1,

@@ -15,7 +15,7 @@ class Connexion extends React.Component {
                 <MaterialFixedLabelTextbox6
                     style={styles.materialFixedLabelTextbox6}
                 ></MaterialFixedLabelTextbox6>
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop:'-70%' }}>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: '-70%' }}>
                     <View style={styles.submitContainer}>
                         <TouchableOpacity
                             onPress={() => navigation.navigate('Inscription')}>
@@ -59,8 +59,8 @@ const styles = StyleSheet.create({
         paddingVertical: 13,
         textAlign: 'center',
         color: '#FFFFFF'
-      },
-      submitContainer:{
+    },
+    submitContainer: {
         backgroundColor: "#6D071A",
         borderRadius: 25,
         marginVertical: 10,
