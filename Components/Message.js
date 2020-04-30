@@ -96,7 +96,7 @@ class Message extends React.Component {
                         <TextInput
                             style={{ height: 40 }}
                             placeholder="Type here to translate!"
-                            multiline= 'true'
+                            multiline= {true}
 
                         />
                     </ScrollView>
