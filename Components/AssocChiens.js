@@ -84,19 +84,6 @@ class AssocChiens extends React.Component {
 
 
 const styles = StyleSheet.create({
-    statusbar: {
-        backgroundColor: "#6D071A",
-        height: 88,
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        paddingBottom: 11
-
-    },
-    textStatus: {
-        color: "white",
-        fontSize: 18,
-        fontWeight: "600"
-    },
     caseAssoc: {
         alignSelf: 'stretch',
         height: 250,
