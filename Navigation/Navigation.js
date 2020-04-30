@@ -13,11 +13,13 @@ import Association from '../Components/Association';
 import AssocChats from '../Components/AssocChats';
 import AssocChiens from '../Components/AssocChiens';
 import Message from '../Components/Message';
+import MessageToAssoc from '../Components/MessageToAssoc';
 
 const Tab = createBottomTabNavigator();
 const CompteStack = createStackNavigator();
 const AnimalSauveStack = createStackNavigator();
 const MessagerieStack = createStackNavigator();
+const AssociationStack = createStackNavigator();
 
 function TypeAnimalTrouveScreen({ navigation }) {
   return (
@@ -100,6 +102,15 @@ function MessagerieStackScreen() {
   );
 }
 
+function AssociationStackScreen() {
+  return (
+    <AssociationStack.Navigator>
+      <AssociationStack.Screen name="Association" component={Association} options={{ title: 'Associations', headerTintColor: 'white', headerStyle: { backgroundColor: '#6D071A' } }} />
+      <AssociationStack.Screen name="MessageToAssoc" component={MessageToAssoc} options={{ title: 'Message', headerTintColor: 'white', headerStyle: { backgroundColor: '#6D071A' } }} />
+    </AssociationStack.Navigator>
+  );
+}
+
 function MyTabs() {
   return (
 
@@ -125,7 +136,7 @@ function MyTabs() {
       />
       <Tab.Screen
         name="Association"
-        component={Association}
+        component={AssociationStackScreen}
         options={{
           tabBarLabel: '',
           tabBarIcon: ({ color, size }) => (

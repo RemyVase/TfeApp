@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight, FlatList, ScrollView, Image } from 'react-native';
+import MessageToAssoc from '../Components/MessageToAssoc';
 
 const ASSOC = [
     {
@@ -36,10 +37,13 @@ const ASSOC = [
 
 class Association extends React.Component {
 
+    constructor() {
+        super();
+    }
+
     render() {
         return (
             <View>
-                <View style={styles.statusbar}><Text style={styles.textStatus}>Listes des associations</Text></View>
                 <ScrollView style={styles.scroll}>
                     <FlatList
                         data={ASSOC}
@@ -49,7 +53,7 @@ class Association extends React.Component {
                                 <View>
                                     <Image
                                         style={styles.imgAssoc}
-                                        source={{uri: item.logo}}
+                                        source={{ uri: item.logo }}
                                     />
                                     <View style={styles.zonePlace}>
                                         <Text style={styles.stylePlaceTitre}>Places disponibles :</Text>
@@ -69,7 +73,11 @@ class Association extends React.Component {
                                     <View style={styles.zoneDesc}>
                                         <View style={styles.submitContainer}>
                                             <TouchableOpacity
-                                                onPress={() => alert("Ahahahah")}>
+                                                onPress={() => {
+                                                    this.props.navigation.navigate('MessageToAssoc', {
+                                                        ok: item.adresse
+                                                    })
+                                                }}>
                                                 <Text style={styles.submitButton}>Contacter {item.nom}</Text>
                                             </TouchableOpacity>
                                         </View>
@@ -119,7 +127,6 @@ const styles = StyleSheet.create({
 
     },
     scroll: {
-        marginBottom: 87,
         paddingLeft: 10,
         paddingRight: 10
     },
@@ -157,7 +164,7 @@ const styles = StyleSheet.create({
     stylePlace: {
         fontSize: 14
     },
-    stylePlaceTitre:{
+    stylePlaceTitre: {
         fontSize: 14,
         //fontWeight: '600',
         textDecorationLine: "underline",
@@ -171,7 +178,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#FFFFFF'
     },
-    submitContainer:{
+    submitContainer: {
         backgroundColor: "#6D071A",
         borderRadius: 25,
     }
