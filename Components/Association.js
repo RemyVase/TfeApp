@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight, FlatList, ScrollView, Image } from 'react-native';
-import MessageToAssoc from '../Components/MessageToAssoc';
+import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight, FlatList, ScrollView, Image, AsyncStorage } from 'react-native';
 
 const ASSOC = [
     {
@@ -37,11 +36,34 @@ const ASSOC = [
 
 class Association extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        this.state = {
+            pseudoUser: "",
+            mailUser: "",
+            idUser: "",
+            idAssocUser: "",
+        }
+    }
+
+    componentDidMount() {
+        this._loadInitialState().done();
+    }
+
+    _loadInitialState = async () => {
+        var value = await AsyncStorage.getItem('UserId');
+        var value2 = await AsyncStorage.getItem('UserEmail');
+        var value3 = await AsyncStorage.getItem('UserPseudo');
+        var value4 = await AsyncStorage.getItem('UserIdAssoc');
+        this.setState({ pseudoUser: value });
+        this.setState({ mailUser: value2 });
+        this.setState({ idUser: value3 });
+        this.setState({ idAssocUser: value4 });
+        //alert(this.state.pseudoUser);
     }
 
     render() {
+
         return (
             <View>
                 <ScrollView style={styles.scroll}>

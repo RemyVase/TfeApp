@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, TextInput } from "react-native";
-/*this.inscription*/
 
 class Inscription extends React.Component {
     constructor(props) {
@@ -56,7 +55,6 @@ class Inscription extends React.Component {
             })
                 .then((response) => response.json())
                 .then((responseJson) => {
-                    console.log(responseJson);
                     if (responseJson === "ok") {
                         alert('Le compte a bien été créé.');
                     } else if (responseJson === "mailPseudoPasOk") {
@@ -134,37 +132,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignContent: 'center'
-    },
-    rect: {
-        width: 352,
-        height: 234,
-        backgroundColor: "rgba(230, 230, 230,1)",
-        marginTop: 454,
-        marginLeft: 914
-    },
-    materialFixedLabelTextbox: {
-        width: 352,
-        height: 43,
-        marginTop: -526,
-        alignSelf: "center"
-    },
-    materialFixedLabelTextbox1: {
-        width: 352,
-        height: 43,
-        marginTop: 27,
-        alignSelf: "center"
-    },
-    materialFixedLabelTextbox3: {
-        width: 352,
-        height: 43,
-        marginTop: 32,
-        alignSelf: "center"
-    },
-    materialFixedLabelTextbox4: {
-        width: 352,
-        height: 43,
-        marginTop: 33,
-        alignSelf: "center"
     },
     submitButton: {
         width: 100,

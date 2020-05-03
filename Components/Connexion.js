@@ -1,24 +1,86 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
-import MaterialFixedLabelTextbox5 from "../Components/MaterialFixedLabelTextbox5";
-import MaterialFixedLabelTextbox6 from "../Components/MaterialFixedLabelTextbox6";
-
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, AsyncStorage } from "react-native";
 
 class Connexion extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            pseudo: '',
+            mdp: '',
+        }
+    }
+
+    connexion = () => {
+        const { pseudo } = this.state;
+        const { mdp } = this.state;
+        if (pseudo == "") {
+            alert("Entrez votre pseudo");
+        }
+        else if (mdp == "") {
+            alert("Entrez votre mot de passe.");
+        }
+        else {
+
+            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/connexionController.php', {
+                method: 'post',
+                header: {
+                    'Accept': 'application/json',
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    pseudoUser: pseudo,
+                    passwordUser: mdp,
+                })
+
+            })
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    if (responseJson === "mdpPasOk") {
+                        alert("Pseudo/Mail ou mot de passe incorrect.");
+                    } else {
+                        //alert(JSON.stringify(responseJson[0]["id_user"]));
+                        try {
+                            AsyncStorage.setItem('UserId', JSON.stringify(responseJson[0]["id_user"]));
+                            AsyncStorage.setItem('UserEmail', JSON.stringify(responseJson[0]["mail_user"]));
+                            AsyncStorage.setItem('UserPseudo', JSON.stringify(responseJson[0]["pseudo_user"]));
+                            AsyncStorage.setItem('UserIdAssoc', JSON.stringify(responseJson[0]["id_assoc"]));
+                            
+                        } catch(error){
+                            console.log(error);
+                        }
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+    }
+
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.rect}></View>
-                <MaterialFixedLabelTextbox5
-                    style={styles.materialFixedLabelTextbox5}
-                ></MaterialFixedLabelTextbox5>
-                <MaterialFixedLabelTextbox6
-                    style={styles.materialFixedLabelTextbox6}
-                ></MaterialFixedLabelTextbox6>
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: '-70%' }}>
+                <View style={styles.container2}>
+                    <Text style={styles.label}>Pseudo</Text>
+                    <TextInput
+                        style={styles.inputStyle}
+                        value={this.state.pseudo}
+                        onChangeText={(pseudo) => this.setState({ pseudo: pseudo })}
+                    >
+                    </TextInput>
+                </View>
+                <View style={styles.container2}>
+                    <Text style={styles.label}>Mot de passe</Text>
+                    <TextInput
+                        style={styles.inputStyle}
+                        value={this.state.mdp}
+                        onChangeText={(mdp) => this.setState({ mdp: mdp })}
+                    >
+                    </TextInput>
+                </View>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <View style={styles.submitContainer}>
                         <TouchableOpacity
-                            onPress={() => navigation.navigate('Inscription')}>
+                            onPress={this.connexion}>
                             <Text style={styles.submitButton}>Se connecter</Text>
                         </TouchableOpacity>
                     </View>
@@ -34,25 +96,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignContent: 'center'
     },
-    rect: {
-        width: 352,
-        height: 234,
-        backgroundColor: "rgba(230, 230, 230,1)",
-        marginTop: 454,
-        marginLeft: 914
-    },
-    materialFixedLabelTextbox5: {
-        width: 352,
-        height: 43,
-        marginTop: -526,
-        alignSelf: "center"
-    },
-    materialFixedLabelTextbox6: {
-        width: 352,
-        height: 43,
-        marginTop: 27,
-        alignSelf: "center"
-    },
     submitButton: {
         width: 100,
         borderRadius: 25,
@@ -64,6 +107,36 @@ const styles = StyleSheet.create({
         backgroundColor: "#6D071A",
         borderRadius: 25,
         marginVertical: 10,
+    },
+    container2: {
+        backgroundColor: "transparent",
+        flexDirection: "row",
+        paddingLeft: 16,
+        borderColor: "#D9D5DC",
+        borderBottomWidth: 1
+    },
+    label: {
+        width: 223,
+        height: 40,
+        color: "#000",
+        alignSelf: "flex-start",
+        opacity: 0.5,
+        paddingTop: 16,
+        paddingBottom: 8,
+        fontSize: 16,
+        lineHeight: 16
+    },
+    inputStyle: {
+        width: 282,
+        height: 42,
+        color: "#000",
+        alignSelf: "stretch",
+        paddingTop: 14,
+        paddingRight: 5,
+        paddingBottom: 8,
+        paddingLeft: 30,
+        fontSize: 16,
+        lineHeight: 16
     }
 });
 
