@@ -69,6 +69,12 @@ function CompteScreen({ navigation }) {
           <Text style={styles.submitButton}>Connexion</Text>
         </TouchableOpacity>
       </View>
+      <View style={styles.submitContainer}>
+        <TouchableOpacity
+          onPress={() => alert('Pouf ! Déconnecté !')}>
+          <Text style={styles.submitButton}>Déconnexion</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
