@@ -13,6 +13,11 @@ class Connexion extends React.Component {
         }
     }
 
+    componentWillUnmount() {
+        this.props.navigation.goBack();
+        this.props.route.params.onBack();
+    }
+
     connexion = () => {
         const { pseudo } = this.state;
         const { mdp } = this.state;
@@ -47,8 +52,9 @@ class Connexion extends React.Component {
                             AsyncStorage.setItem('UserEmail', JSON.stringify(responseJson[0]["mail_user"]));
                             AsyncStorage.setItem('UserPseudo', JSON.stringify(responseJson[0]["pseudo_user"]));
                             AsyncStorage.setItem('UserIdAssoc', JSON.stringify(responseJson[0]["id_assoc"]));
-                            this.props.navigation.goBack();
-                        } catch(error){
+                            this.componentWillUnmount();
+                            //this.props.navigation.navigate('Compte',{ onBack: onBack.bind(this) });
+                        } catch (error) {
                             console.log(error);
                         }
                     }

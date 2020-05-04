@@ -15,6 +15,7 @@ class Compte extends React.Component {
     //<NavigationEvents onDidFocus={() => this.componentDidMount()} />
     componentDidMount() {
         this._loadInitialState().done();
+        this.props.navigation.addListener('willFocus', this._loadInitialState().done());
     }
 
     _loadInitialState = async () => {
@@ -29,20 +30,19 @@ class Compte extends React.Component {
     }
 
     deconnexion = async () => {
-        this.setState({ idUser: "" });
-        this.setState({ mailUser: "" });
-        this.setState({ pseudoUser: "" });
-        this.setState({ idAssocUser: "" });
         AsyncStorage.clear();
         this.componentDidMount();
+    }
 
+    onBack = () => {
+        this.componentDidMount();
     }
 
     render() {
-        //<NavigationEvents onWillFocus={() => console.log('Marche')} />
         let testLog = this.state.pseudoUser;
         var nav = this.props;
         var deco = this.deconnexion;
+        var back = this.onBack;
 
 
 
@@ -70,7 +70,7 @@ class Compte extends React.Component {
                         </View>
                         <View style={styles.submitContainer}>
                             <TouchableOpacity
-                                onPress={() => nav.navigation.navigate('Connexion')}>
+                                onPress={() => nav.navigation.navigate('Connexion',{ onBack: back.bind(this) })}>
                                 <Text style={styles.submitButton}>Connexion</Text>
                             </TouchableOpacity>
                         </View>
