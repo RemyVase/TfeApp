@@ -14,7 +14,7 @@ class Connexion extends React.Component {
     }
 
     componentWillUnmount() {
-        this.props.navigation.goBack();
+        this.props.navigation.navigate('Compte');
         this.props.route.params.onBack();
     }
 
