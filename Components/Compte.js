@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, TextInput, AsyncStorage } from "react-native";
+import { NavigationEvents } from "react-navigation";
 
 class Compte extends React.Component {
     constructor(props) {
@@ -9,9 +10,9 @@ class Compte extends React.Component {
             mailUser: "",
             idUser: "",
             idAssocUser: "",
-        }
+        };
     }
-
+    //<NavigationEvents onDidFocus={() => this.componentDidMount()} />
     componentDidMount() {
         this._loadInitialState().done();
     }
@@ -25,57 +26,61 @@ class Compte extends React.Component {
         this.setState({ mailUser: value2 });
         this.setState({ pseudoUser: value3 });
         this.setState({ idAssocUser: value4 });
-        alert(this.state.pseudoUser);
+    }
+
+    deconnexion = async () => {
+        this.setState({ idUser: "" });
+        this.setState({ mailUser: "" });
+        this.setState({ pseudoUser: "" });
+        this.setState({ idAssocUser: "" });
+        AsyncStorage.clear();
+        this.componentDidMount();
+
     }
 
     render() {
+        //<NavigationEvents onWillFocus={() => console.log('Marche')} />
         let testLog = this.state.pseudoUser;
         var nav = this.props;
+        var deco = this.deconnexion;
 
-        async function deconnexion(){
-            try {
-                AsyncStorage.clear();
-                return true;
-            }
-            catch(exception) {
-                alert("marche pas");
-                return false;
-            }
-        }
+
 
         function CheckSiCo() {
             if (testLog != null) {
                 return (
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+
                         <View style={styles.submitContainer}>
                             <TouchableOpacity
-                                onPress={() => deconnexion()}>
+                                onPress={deco}>
                                 <Text style={styles.submitButton}>Déconnexion</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                 )
             } else {
-                return(
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <View style={styles.submitContainer}>
-                        <TouchableOpacity
-                            onPress={() => nav.navigation.navigate('Inscription')}>
-                            <Text style={styles.submitButton}>Inscription</Text>
-                        </TouchableOpacity>
+                return (
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <View style={styles.submitContainer}>
+                            <TouchableOpacity
+                                onPress={() => nav.navigation.navigate('Inscription')}>
+                                <Text style={styles.submitButton}>Inscription</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.submitContainer}>
+                            <TouchableOpacity
+                                onPress={() => nav.navigation.navigate('Connexion')}>
+                                <Text style={styles.submitButton}>Connexion</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                    <View style={styles.submitContainer}>
-                        <TouchableOpacity
-                            onPress={() => nav.navigation.navigate('Connexion')}>
-                            <Text style={styles.submitButton}>Connexion</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
                 )
             }
         }
 
         return (
+
             <CheckSiCo />
         )
     }

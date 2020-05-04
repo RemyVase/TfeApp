@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, TextInput, AsyncStorage } from "react-native";
+import { NavigationEvents } from "react-navigation";
+
+
 
 class Connexion extends React.Component {
     constructor(props) {
@@ -44,7 +47,7 @@ class Connexion extends React.Component {
                             AsyncStorage.setItem('UserEmail', JSON.stringify(responseJson[0]["mail_user"]));
                             AsyncStorage.setItem('UserPseudo', JSON.stringify(responseJson[0]["pseudo_user"]));
                             AsyncStorage.setItem('UserIdAssoc', JSON.stringify(responseJson[0]["id_assoc"]));
-                            
+                            this.props.navigation.goBack();
                         } catch(error){
                             console.log(error);
                         }
