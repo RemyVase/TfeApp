@@ -55,9 +55,9 @@ class Association extends React.Component {
         var value2 = await AsyncStorage.getItem('UserEmail');
         var value3 = await AsyncStorage.getItem('UserPseudo');
         var value4 = await AsyncStorage.getItem('UserIdAssoc');
-        this.setState({ pseudoUser: value });
+        this.setState({ idUser: value });
         this.setState({ mailUser: value2 });
-        this.setState({ idUser: value3 });
+        this.setState({ pseudoUser: value3 });
         this.setState({ idAssocUser: value4 });
         //alert(this.state.pseudoUser);
     }

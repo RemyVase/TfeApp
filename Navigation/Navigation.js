@@ -14,13 +14,13 @@ import AssocChats from '../Components/AssocChats';
 import AssocChiens from '../Components/AssocChiens';
 import Message from '../Components/Message';
 import MessageToAssoc from '../Components/MessageToAssoc';
+import Compte from '../Components/Compte';
 
 const Tab = createBottomTabNavigator();
 const CompteStack = createStackNavigator();
 const AnimalSauveStack = createStackNavigator();
 const MessagerieStack = createStackNavigator();
 const AssociationStack = createStackNavigator();
-
 
 function TypeAnimalTrouveScreen({ navigation }) {
   return (
@@ -54,35 +54,10 @@ function AnimalSauveScreen({ navigation }) {
   );
 }
 
-function CompteScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <View style={styles.submitContainer}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Inscription')}>
-          <Text style={styles.submitButton}>Inscription</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.submitContainer}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Connexion')}>
-          <Text style={styles.submitButton}>Connexion</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.submitContainer}>
-        <TouchableOpacity
-          onPress={() => alert('Pouf ! Déconnecté !')}>
-          <Text style={styles.submitButton}>Déconnexion</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-}
-
 function CompteStackScreen() {
   return (
     <CompteStack.Navigator>
-      <CompteStack.Screen name="Compte" component={CompteScreen} options={{ title: 'Compte', headerTintColor: 'white', headerStyle: { backgroundColor: '#6D071A' } }} />
+      <CompteStack.Screen name="Compte" component={Compte} options={{ title: 'Compte', headerTintColor: 'white', headerStyle: { backgroundColor: '#6D071A' } }} />
       <CompteStack.Screen name="Inscription" component={Inscription} options={{ title: 'Inscription', headerTintColor: 'white', headerStyle: { backgroundColor: '#6D071A' } }} />
       <CompteStack.Screen name="Connexion" component={Connexion} options={{ title: 'Connexion', headerTintColor: 'white', headerStyle: { backgroundColor: '#6D071A' } }} />
     </CompteStack.Navigator>

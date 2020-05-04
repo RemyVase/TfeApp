@@ -8,7 +8,7 @@ class Inscription extends React.Component {
             pseudo: '',
             email: '',
             mdp: '',
-            confirmMdp: ''
+            confirmMdp: '',
         }
     }
 
