@@ -24,6 +24,10 @@ class dbAccess
             case 'checkNbDemande':
             case 'recupAllMembre':
             case 'messageTakeLastConvCree':
+                /* Ajout pour app */
+            case 'appRecupAllAssoc':
+            case 'appRecupAllAssocChats':
+            case 'appRecupAllAssocChiens':
                 array_push($params);
 
                 try {

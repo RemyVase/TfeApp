@@ -1,41 +1,8 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight, FlatList, ScrollView, Image, AsyncStorage } from 'react-native';
 
-const ASSOC = [
-    {
-        id: '1',
-        nom: 'Inni',
-        placesQ: '15',
-        placesEO: '4',
-        adresse: 'Charleroi',
-        description: "blablablablablablablablabla",
-        typeAnimal: 'Chats',
-        logo: 'http://localhost:8878/TFE-RemyVase/TFE-Ephec-2019-2020/flash/img/img_assoc/chatAdopte7100462.jpeg'
-    },
-    {
-        id: '2',
-        nom: 'Cat à Cat',
-        placesQ: '2',
-        placesEO: '29',
-        adresse: "La Louvière",
-        description: "blublublublublublublublublublu",
-        typeAnimal: 'Chats',
-        logo: 'http://localhost:8878/TFE-RemyVase/TFE-Ephec-2019-2020/flash/img/img_assoc/chatAdopte7100462.jpeg'
-    },
-    {
-        id: '3',
-        nom: 'Chabidou',
-        placesQ: '4',
-        placesEO: '4',
-        adresse: 'Pont-à-Celles',
-        description: 'bliblibliblibliblibliblibliblibli',
-        typeAnimal: 'Chiens',
-        logo: 'http://localhost:8878/TFE-RemyVase/TFE-Ephec-2019-2020/flash/img/img_assoc/chatAdopte7100462.jpeg'
-    }
-]
-
 class Association extends React.Component {
-
+    
     constructor(props) {
         super(props);
         this.state = {
@@ -43,24 +10,28 @@ class Association extends React.Component {
             mailUser: "",
             idUser: "",
             idAssocUser: "",
+            listeAssoc: [],
         }
     }
 
     componentDidMount() {
-        this._loadInitialState().done();
+        fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/listeAssociationsController.php', {
+            method: 'post',
+            header: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json'
+            }
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson);
+                this.setState({ listeAssoc: responseJson });
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
-    _loadInitialState = async () => {
-        var value = await AsyncStorage.getItem('UserId');
-        var value2 = await AsyncStorage.getItem('UserEmail');
-        var value3 = await AsyncStorage.getItem('UserPseudo');
-        var value4 = await AsyncStorage.getItem('UserIdAssoc');
-        this.setState({ idUser: value });
-        this.setState({ mailUser: value2 });
-        this.setState({ pseudoUser: value3 });
-        this.setState({ idAssocUser: value4 });
-        //alert(this.state.pseudoUser);
-    }
 
     render() {
 
@@ -68,36 +39,36 @@ class Association extends React.Component {
             <View>
                 <ScrollView style={styles.scroll}>
                     <FlatList
-                        data={ASSOC}
-                        keyExtractor={(item) => item.id.toString()}
+                        data={this.state.listeAssoc}
+                        keyExtractor={(item) => item.id_assoc}
                         renderItem={({ item }) =>
                             <View style={styles.caseAssoc}>
                                 <View>
                                     <Image
                                         style={styles.imgAssoc}
-                                        source={{ uri: item.logo }}
+                                        source={{ uri: 'http://localhost:8878/TFE-RemyVase/TFE-Ephec-2019-2020/flash/img/img_assoc/chatAdopte7100462.jpeg' }}
                                     />
                                     <View style={styles.zonePlace}>
                                         <Text style={styles.stylePlaceTitre}>Places disponibles :</Text>
                                         <View>
-                                            <Text style={styles.stylePlace}>Quarantaine : {item.placesQ}</Text>
-                                            <Text style={styles.stylePlace}>Ordre : {item.placesEO}</Text>
+                                            <Text style={styles.stylePlace}>Quarantaine : {item.nbPlaceQuarant_assoc}</Text>
+                                            <Text style={styles.stylePlace}>Ordre : {item.nbPlaceRegle_assoc}</Text>
                                         </View>
                                     </View>
                                 </View>
 
                                 <View style={styles.zoneText}>
                                     <View style={styles.zoneTitre}>
-                                        <Text style={styles.nomAssoc}>{item.nom}</Text>
-                                        <Text style={styles.adresseStyle}>Ville : {item.adresse}</Text>
-                                        <Text style={styles.typeStyle}>Type d'animaux : {item.typeAnimal}</Text>
+                                        <Text style={styles.nomAssoc}>{item.nom_assoc}</Text>
+                                        <Text style={styles.adresseStyle}>Ville : {item.adresse_assoc}</Text>
+                                        <Text style={styles.typeStyle}>Type d'animaux : {item.typeAnimal_assoc}</Text>
                                     </View>
                                     <View style={styles.zoneDesc}>
                                         <View style={styles.submitContainer}>
                                             <TouchableOpacity
                                                 onPress={() => {
                                                     this.props.navigation.navigate('MessageToAssoc', {
-                                                        ok: item.adresse
+                                                        ok: item.id_assoc
                                                     })
                                                 }}>
                                                 <Text style={styles.submitButton}>Contacter {item.nom}</Text>
