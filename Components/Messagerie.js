@@ -3,9 +3,8 @@ import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight, FlatList,
 import Message from '../Components/Message';
 
 class Messagerie extends React.Component {
-
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             pseudoUser: "",
             mailUser: "",
@@ -24,27 +23,43 @@ class Messagerie extends React.Component {
 
     }
 
-    refresh = () => {
-        this.componentDidMount();
-    }
-
     _recupAllConv = async () => {
         var userId = await AsyncStorage.getItem('UserId');
-        fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/listeConversationUserController.php', {
-            method: 'post',
-            header: {
-                'Accept': 'application/json',
-                'Content-type': 'application/json'
-            },
-            body: '{"idUser": ' + userId + '}'
-        })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                this.setState({ listConvers: responseJson });
+        var userIdAssoc = await AsyncStorage.getItem('UserIdAssoc');
+        if (userIdAssoc === "null") {
+            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/listeConversationUserController.php', {
+                method: 'post',
+                header: {
+                    'Accept': 'application/json',
+                    'Content-type': 'application/json'
+                },
+                body: '{"idUser": ' + userId + '}'
             })
-            .catch((error) => {
-                console.error(error);
-            });
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    this.setState({ listConvers: responseJson });
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        } else {
+            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/listeConversationUserAssocController.php', {
+                method: 'post',
+                header: {
+                    'Accept': 'application/json',
+                    'Content-type': 'application/json'
+                },
+                body: '{"idUserAssoc": ' + userIdAssoc + '}'
+            })
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    this.setState({ listConvers: responseJson });
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+
     }
 
     _loadInitialState = async () => {
@@ -59,12 +74,10 @@ class Messagerie extends React.Component {
         this.setState({ idAssocUser: value4 });
     }
 
-
-
-
-
     render() {
-        let testLog = this.state.pseudoUser;
+        const testLog = this.state.pseudoUser;
+        const estDansAssoc = this.state.idAssocUser;
+        //alert(this.state.idAssocUser);
         var nav = this.props;
         var state = this.state;
         const Entities = require('html-entities').AllHtmlEntities;
@@ -72,37 +85,74 @@ class Messagerie extends React.Component {
 
         function CheckSiCo() {
             if (testLog != null) {
-                return (
-                    <View>
-                        <ScrollView style={styles.scroll}>
-                            <FlatList
-                                data={state.listConvers}
-                                keyExtractor={(item) => item.id_user.toString()}
-                                renderItem={({ item }) =>
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            nav.navigation.navigate('Message', {
-                                                ok: item.dernierMsg
-                                            })
-                                        }}>
-                                        <View style={styles.caseMessage}>
-                                            <View style={styles.zoneNomContact}>
-                                                <Text style={styles.nomContact}>{item.nom_assoc}</Text>
-                                            </View>
-                                            <View style={styles.zoneMessage}>
-                                                <View style={styles.zoneLastMessage}>
-                                                    <Text style={styles.lastMsg}>{entities.decode(item.contenu_message)}</Text>
+                alert(state.idAssocUser);
+                if (state.idAssocUser === "null") {
+                    return (
+                        <View>
+                            <ScrollView style={styles.scroll}>
+                                <FlatList
+                                    data={state.listConvers}
+                                    keyExtractor={(item) => item.id_user.toString()}
+                                    renderItem={({ item }) =>
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                nav.navigation.navigate('Message', {
+                                                    ok: item.dernierMsg
+                                                })
+                                            }}>
+                                            <View style={styles.caseMessage}>
+                                                <View style={styles.zoneNomContact}>
+                                                    <Text style={styles.nomContact}>{item.nom_assoc}</Text>
                                                 </View>
-                                                <View style={styles.zoneHeure}>
-                                                    <Text style={styles.dateMsg}>{item.date_message}</Text>
+                                                <View style={styles.zoneMessage}>
+                                                    <View style={styles.zoneLastMessage}>
+                                                        <Text style={styles.lastMsg}>{entities.decode(item.contenu_message)}</Text>
+                                                    </View>
+                                                    <View style={styles.zoneHeure}>
+                                                        <Text style={styles.dateMsg}>{item.date_message}</Text>
+                                                    </View>
                                                 </View>
                                             </View>
-                                        </View>
-                                    </TouchableOpacity>}
-                            />
-                        </ScrollView>
-                    </View>
-                )
+                                        </TouchableOpacity>}
+                                />
+                            </ScrollView>
+                        </View>
+                    )
+                } else {
+                    return (
+                        <View>
+                            <ScrollView style={styles.scroll}>
+                                <FlatList
+                                    data={state.listConvers}
+                                    keyExtractor={(item) => item.id_user.toString()}
+                                    renderItem={({ item }) =>
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                nav.navigation.navigate('Message', {
+                                                    ok: item.dernierMsg
+                                                })
+                                            }}>
+                                            <View style={styles.caseMessage}>
+                                                <View style={styles.zoneNomContact}>
+                                                    <Text style={styles.nomContact}>{item.nom_assoc}</Text>
+                                                </View>
+                                                <View style={styles.zoneMessage}>
+                                                    <View style={styles.zoneLastMessage}>
+                                                        <Text style={styles.lastMsg}>{entities.decode(item.contenu_message)}</Text>
+                                                    </View>
+                                                    <View style={styles.zoneHeure}>
+                                                        <Text style={styles.dateMsg}>{item.date_message}</Text>
+                                                    </View>
+                                                </View>
+                                            </View>
+                                        </TouchableOpacity>}
+                                />
+                            </ScrollView>
+                        </View>
+                    )
+
+                }
+
             } else {
                 return (
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
