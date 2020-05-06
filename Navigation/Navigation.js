@@ -119,6 +119,7 @@ function MyTabs() {
             <MaterialCommunityIcons name="alert-octagon" color={color} size={size} />
           )
         }}
+        
       />
       <Tab.Screen
         name="Association"
@@ -128,6 +129,7 @@ function MyTabs() {
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account-group" color={color} size={size} />
           ),
+
         }}
       />
       <Tab.Screen
@@ -137,7 +139,8 @@ function MyTabs() {
           tabBarLabel: '',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="message" color={color} size={size} />
-          ),
+          )
+
         }}
       />
       <Tab.Screen
@@ -169,11 +172,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#FFFFFF'
   },
-  submitContainer:{
+  submitContainer: {
     backgroundColor: "#6D071A",
     borderRadius: 25,
     marginVertical: 10,
-}
+  }
 
 });
 
