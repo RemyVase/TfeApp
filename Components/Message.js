@@ -1,51 +1,65 @@
 import React, { Component, useState } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView, FlatList, TextInput, Image } from "react-native";
-
-const MESSAGES = [
-    {
-        id: '1',
-        nom: 'Toto',
-        msg: 'Bonjour',
-        date: "15/04/2020",
-        envoyeur: 1
-    },
-    {
-        id: '2',
-        nom: 'Moi',
-        msg: 'Ca va et toi ?',
-        date: "17/04/2020",
-        envoyeur: 1
-    },
-    {
-        id: '3',
-        nom: 'Toto',
-        msg: 'Tranquille la vie avec win for life',
-        date: "04/03/2020",
-        envoyeur: 0
-    }
-]
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, FlatList, TextInput, Image, AsyncStorage } from "react-native";
 
 class Message extends React.Component {
     constructor() {
         super();
         this.state = {
-
+            listMessage: [],
+            idUser: "",
+            mailUser: "",
+            pseudoUser: "",
+            idAssocUser: "",
         }
+    }
+
+    componentDidMount() {
+        this._loadInitialState().done();
+        fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/listeMessageController.php', {
+            method: 'post',
+            header: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json'
+            },
+            body: '{"idConv": ' + this.props.route.params.idConv + '}'
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({ listMessage: responseJson });
+                alert(responseJson[0]['contenu_message']);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
+    _loadInitialState = async () => {
+        var value = await AsyncStorage.getItem('UserId');
+        var value2 = await AsyncStorage.getItem('UserEmail');
+        var value3 = await AsyncStorage.getItem('UserPseudo');
+        var value4 = await AsyncStorage.getItem('UserIdAssoc');
+
+        this.setState({ idUser: value });
+        this.setState({ mailUser: value2 });
+        this.setState({ pseudoUser: value3 });
+        this.setState({ idAssocUser: value4 });
     }
 
     render() {
         // RECUPERE LES DATAS DE MESSAGERIE (3H30 DE PERDU POUR des '', Courage à moi)
         const { test } = this.props.route.params;
-        console.log(this.props.route.params.ok);
+        messages = this.state.listMessage;
+        idUserCo = this.state.idUser;
+        //alert(this.props.route.params.idConv);
         //////////////////////////////////////////////////////////////////////////////
 
-        //const [text, setText] = useState('');
-        function TriMsg(props) {
-            const envoyeur = props.envoyeur;
-            const date = props.date;
-            const nom = props.nom;
-            const msg = props.msg;
-            if (envoyeur) {
+        function TriMsg(liste) {
+            const envoyeur = '"' + liste.envoyeur + '"';
+            const date = liste.date;
+            const nom = liste.nom;
+            const msg = liste.msg;
+            alert(envoyeur);
+            if (envoyeur != idUserCo) {
                 return (
                     <View style={styles.messageRecu}>
                         <View style={styles.zoneTextMessage}>
@@ -84,10 +98,10 @@ class Message extends React.Component {
             <View style={{ flex: 1 }}>
                 <ScrollView style={styles.scroll}>
                     <FlatList
-                        data={MESSAGES}
-                        keyExtractor={(item) => item.id.toString()}
+                        data={messages}
+                        keyExtractor={(item) => item.date_message}
                         renderItem={({ item }) =>
-                            <TriMsg envoyeur={item.envoyeur} date={item.date} nom={item.nom} msg={item.msg} />
+                            <TriMsg envoyeur={item.id_envoyeur} date={item.date_message} nom={item.pseudo_user} msg={item.contenu_message} />
                         }
                     />
                 </ScrollView>
@@ -95,8 +109,8 @@ class Message extends React.Component {
                     <ScrollView style={styles.inputText}>
                         <TextInput
                             style={{ height: 40 }}
-                            placeholder="Type here to translate!"
-                            multiline= {true}
+                            placeholder="Ecrivez votre nouveau message ici..!"
+                            multiline={true}
 
                         />
                     </ScrollView>
@@ -106,7 +120,7 @@ class Message extends React.Component {
 
                         <View style={styles.zoneButton}>
                             <Image
-                                source={require('../assets/iconEnvoi.png')} 
+                                source={require('../assets/iconEnvoi.png')}
                             />
                         </View>
 
@@ -194,7 +208,7 @@ const styles = StyleSheet.create({
     },
     zoneButton: {
         alignItems: 'center',
-        
+
     }
 });
 

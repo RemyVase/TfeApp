@@ -21,57 +21,15 @@ class Messagerie extends React.Component {
         }
     }
 
-
     componentDidMount() {
         const checkSiRetourSurCetEcran = this.props.navigation.addListener('focus', e => {
-            this.setState({listConversCorrect : []});
             this._loadInitialState().done();
-            //this._recupAllConv().done();
-            let tab = this.recupNomOuAssoc();
-            this.setState({ listConversCorrect : tab });
-            console.log(this.state.listConversCorrect);
+            //let tab = this.recupNomOuAssoc();
+            this.setState({ listConversCorrect : this.recupNomOuAssoc() });
         });
 
     }
-/*
-    _recupAllConv = async () => {
-        var userId = await AsyncStorage.getItem('UserId');
-        var userIdAssoc = await AsyncStorage.getItem('UserIdAssoc');
-        if (userIdAssoc === "null") {
-            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/listeConversationUserController.php', {
-                method: 'post',
-                header: {
-                    'Accept': 'application/json',
-                    'Content-type': 'application/json'
-                },
-                body: '{"idUser": ' + userId + '}'
-            })
-                .then((response) => response.json())
-                .then((responseJson) => {
-                    this.setState({ listConvers: responseJson });
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        } else {
-            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/listeConversationUserAssocController.php', {
-                method: 'post',
-                header: {
-                    'Accept': 'application/json',
-                    'Content-type': 'application/json'
-                },
-                body: '{"idUserAssoc": ' + userIdAssoc + '}'
-            })
-                .then((response) => response.json())
-                .then((responseJson) => {
-                    this.setState({ listConvers: responseJson });
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        }
-    }
-*/
+
     _loadInitialState = async () => {
         var value = await AsyncStorage.getItem('UserId');
         var value2 = await AsyncStorage.getItem('UserEmail');
@@ -83,6 +41,7 @@ class Messagerie extends React.Component {
         this.setState({ pseudoUser: value3 });
         this.setState({ idAssocUser: value4 });
 
+        //ICI JE RECUPERE LES CONVERSATIONS (Ancienne fonction copiée collée pour limiter les setState différents)
         var userId = await AsyncStorage.getItem('UserId');
         var userIdAssoc = await AsyncStorage.getItem('UserIdAssoc');
         if (userIdAssoc === "null") {
@@ -194,7 +153,7 @@ class Messagerie extends React.Component {
                                 .then((responseJson4) => {
                                     //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
                                     if (responseJson4[0] != undefined) {
-                                        tab[i]['pseudo_user'] = responseJson[4]['nom_assoc'];
+                                        tab[i]['pseudo_user'] = responseJson4[0]['nom_assoc'];
                                     }
                                 })
                                 .catch((error) => {
@@ -204,7 +163,6 @@ class Messagerie extends React.Component {
                     });
             }
         }
-        
         return tab;
     }
 
@@ -229,7 +187,7 @@ class Messagerie extends React.Component {
                                         <TouchableOpacity
                                             onPress={() => {
                                                 nav.navigation.navigate('Message', {
-                                                    ok: item.dernierMsg
+                                                    idConv: item.id_convers
                                                 })
                                             }}>
                                             <View style={styles.caseMessage}>
@@ -261,7 +219,7 @@ class Messagerie extends React.Component {
                                         <TouchableOpacity
                                             onPress={() => {
                                                 nav.navigation.navigate('Message', {
-                                                    ok: item.dernierMsg
+                                                    idConv: item.id_convers
                                                 })
                                             }}>
                                             <View style={styles.caseMessage}>
