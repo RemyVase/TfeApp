@@ -80,6 +80,7 @@ class dbAccess
             case 'messageCheckSiEnvoyeurDansAssoc':
             case 'messageRecupPseudoUser':
             case 'messageCheckUser':
+            case 'appRecupNomAssoc':
                 array_push($params, '?');
 
                 try {

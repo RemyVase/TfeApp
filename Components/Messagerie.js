@@ -16,19 +16,24 @@ class Messagerie extends React.Component {
             pseudoConvers: "",
             //Pareil il me faut un state pour stocker et sortir la valeur de mon fetch 
             pseudoUserConvers: "",
+            pseudoAssocConvers: "",
+            listConversCorrect: [],
         }
     }
 
 
     componentDidMount() {
         const checkSiRetourSurCetEcran = this.props.navigation.addListener('focus', e => {
+            this.setState({listConversCorrect : []});
             this._loadInitialState().done();
-            this._recupAllConv().done();
-            this.recupNomOuAssoc().done();
+            //this._recupAllConv().done();
+            let tab = this.recupNomOuAssoc();
+            this.setState({ listConversCorrect : tab });
+            console.log(this.state.listConversCorrect);
         });
 
     }
-
+/*
     _recupAllConv = async () => {
         var userId = await AsyncStorage.getItem('UserId');
         var userIdAssoc = await AsyncStorage.getItem('UserIdAssoc');
@@ -66,7 +71,7 @@ class Messagerie extends React.Component {
                 });
         }
     }
-
+*/
     _loadInitialState = async () => {
         var value = await AsyncStorage.getItem('UserId');
         var value2 = await AsyncStorage.getItem('UserEmail');
@@ -77,79 +82,130 @@ class Messagerie extends React.Component {
         this.setState({ mailUser: value2 });
         this.setState({ pseudoUser: value3 });
         this.setState({ idAssocUser: value4 });
+
+        var userId = await AsyncStorage.getItem('UserId');
+        var userIdAssoc = await AsyncStorage.getItem('UserIdAssoc');
+        if (userIdAssoc === "null") {
+            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/listeConversationUserController.php', {
+                method: 'post',
+                header: {
+                    'Accept': 'application/json',
+                    'Content-type': 'application/json'
+                },
+                body: '{"idUser": ' + userId + '}'
+            })
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    this.setState({ listConvers: responseJson });
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        } else {
+            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/listeConversationUserAssocController.php', {
+                method: 'post',
+                header: {
+                    'Accept': 'application/json',
+                    'Content-type': 'application/json'
+                },
+                body: '{"idUserAssoc": ' + userIdAssoc + '}'
+            })
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    this.setState({ listConvers: responseJson });
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
     }
 
     //Fonction permettant de savoir si l'utilisateur est le dernier envoyeur afin d'afficher un bon nom de conversation
-    recupNomOuAssoc = async () => {
+    recupNomOuAssoc(){
+        let tab = this.state.listConvers;
         //Boucle pour parcourir la liste de conversation
-        for (let i = 0; i < this.state.listConvers.length; i++) {
-            var pseudoEnvoyeur = '"' + this.state.listConvers[i]['pseudo_user'] + '"';
+        for (let i = 0; i < tab.length; i++) {
+            var pseudoEnvoyeur = '"' + tab[i]['pseudo_user'] + '"';
             //Si l'utilisateur connecté est l'envoyeur du dernier message j'essaie de récupérer le pseudo de l'utilisateur à qui il parle ou celui de l'association à qui il parle
             if (pseudoEnvoyeur === this.state.pseudoUser) {
-                let pseudoConvers = "";
-                //alert(this.state.listConvers[i]['id_convers']);
-                //alert("pseudo connecté");
-                //Vu que l'utilisateur connecté est l'envoyeur du dernier message je vérifie d'abord si l'envoyeur est un user, 
-                //si le fetch retourne quelque chose c'est que c'est un user normal et pas une assoc
-                fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/checkUserMessageController.php', {
+                fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/recupPseudoUserController.php', {
                     method: 'post',
                     header: {
                         'Accept': 'application/json',
                         'Content-type': 'application/json'
                     },
-                    body: '{"idConv": "' + this.state.listConvers[i]['id_convers'] + '"}'
+                    body: '{"idConv": "' + tab[i]['id_convers'] + '"}'
                 })
                     .then((response) => response.json())
                     .then((responseJson) => {
-                        pseudoConvers = responseJson[0]["id_user"];
-                        if(pseudoConvers === []){
-                            this.setState({pseudoConvers : "null"});
-                        }else{
-                            this.setState({pseudoConvers : pseudoConvers});
+                        //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
+                        if (responseJson[0] === undefined) {
+                            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/recupPseudoAssocController.php', {
+                                method: 'post',
+                                header: {
+                                    'Accept': 'application/json',
+                                    'Content-type': 'application/json'
+                                },
+                                body: '{"idConv": "' + tab[i]['id_convers'] + '", "idAssocCo" : ' + this.state.idAssocUser + '}'
+                            })
+                                .then((response) => response.json())
+                                .then((responseJson2) => {
+                                    //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
+                                    if (responseJson2[0] != undefined) {
+                                        pseudoAssocConvers = responseJson2[0]["nom_assoc"];
+                                        tab[i]["pseudo_user"] = responseJson2[0][0];
+                                        alert(tab[i]["pseudo_user"]);
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error(error);
+                                });
+                        } else {
+                            pseudoUserConvers = responseJson[0]["pseudo_user"];
+                            tab[i]["pseudo_user"] = responseJson[0]["pseudo_user"];
                         }
                     })
                     .catch((error) => {
                         console.error(error);
                     });
-                // Si le résultat du fetch est non null ca veut dire que l'envoyeur est un utilisateur je vais donc faire un fetch pour récupérer son pseudo
-                if(this.state.pseudoConvers != "null"){
-                    fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/recupPseudoUserController.php', {
+                //Je remplace le pseudo envoyeur par le bon pseudo pour bien afficher
+                //On ne peux modifier directement l'array du state donc je créé un nouveau tableau sur base de celui du state et je le modifier avant de setstate
+            } else {
+                fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/checkUserIntoAssocController.php', {
                     method: 'post',
                     header: {
                         'Accept': 'application/json',
                         'Content-type': 'application/json'
                     },
-                    body: '{"idConv": "' + this.state.listConvers[i]['id_convers'] + '"}'
+                    body: '{"idEnvoyeur": "' + tab[i]['id_envoyeur'] + '"}'
                 })
                     .then((response) => response.json())
-                    .then((responseJson) => {
-                        //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
-                        pseudoUserConvers = responseJson[0]["pseudo_user"];
-                            this.setState({pseudoUserConvers : pseudoUserConvers});
-                    })
-                    .catch((error) => {
-                        console.error(error);
+                    .then((responseJson3) => {
+                        if (responseJson3[0] != undefined) {
+                            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/recupNomAssocController.php', {
+                                method: 'post',
+                                header: {
+                                    'Accept': 'application/json',
+                                    'Content-type': 'application/json'
+                                },
+                                body: '{"idAssoc": "' + responseJson3[0]['id_assoc'] + '"}'
+                            })
+                                .then((response) => response.json())
+                                .then((responseJson4) => {
+                                    //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
+                                    if (responseJson4[0] != undefined) {
+                                        tab[i]['pseudo_user'] = responseJson[4]['nom_assoc'];
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error(error);
+                                });
+                        }
                     });
-                    //Je remplace le pseudo envoyeur par le bon pseudo pour bien afficher
-                    //On ne peux modifier directement l'array du state donc je créé un nouveau tableau sur base de celui du state et je le modifier avant de setstate
-                    let tab = this.state.listConvers;
-                    tab[i]['pseudo_user'] = this.state.pseudoUserConvers;
-                    this.setState({listConvers : tab});
-                    //this.state.listConvers[i]['pseudo_user'] = this.state.pseudoUserConvers;
-                    //alert(this.state.listConvers[i]['pseudo_user']);
-                }
-                //Le else ici c'est pour dire que si le premier fetch vérifiant si l'envoyeur était juste un simple utilisateur n'est pas concluant c'est que c'est une assoc qui a envoyé le message
-                else{
-                    // faire un fetch pour récupérer l'id de l'assoc 
-
-                    //Ensuite refaire un fetch pour récupérer le nom de l'assoc
-
-                }
-            } else {
-                //Afficher le pseudo de l'utilisateur d'en face ou de l'assoc d'en face
-                //alert("Pas pseudo connecté");
             }
         }
+        
+        return tab;
     }
 
     render() {
@@ -167,8 +223,8 @@ class Messagerie extends React.Component {
                         <View>
                             <ScrollView style={styles.scroll}>
                                 <FlatList
-                                    data={state.listConvers}
-                                    keyExtractor={(item) => item.id_user.toString()}
+                                    data={state.listConversCorrect}
+                                    keyExtractor={(item) => item.id_convers.toString()}
                                     renderItem={({ item }) =>
                                         <TouchableOpacity
                                             onPress={() => {
@@ -199,8 +255,8 @@ class Messagerie extends React.Component {
                         <View>
                             <ScrollView style={styles.scroll}>
                                 <FlatList
-                                    data={state.listConvers}
-                                    keyExtractor={(item) => item.id_user.toString()}
+                                    data={state.listConversCorrect}
+                                    keyExtractor={(item) => item.id_convers.toString()}
                                     renderItem={({ item }) =>
                                         <TouchableOpacity
                                             onPress={() => {
