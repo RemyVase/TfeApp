@@ -113,7 +113,7 @@ class Messagerie extends React.Component {
                                     if (responseJson2[0] != undefined) {
                                         pseudoAssocConvers = responseJson2[0]["nom_assoc"];
                                         tab[i]["pseudo_user"] = responseJson2[0][0];
-                                        alert(tab[i]["pseudo_user"]);
+                                    
                                     }
                                 })
                                 .catch((error) => {

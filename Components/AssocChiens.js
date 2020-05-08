@@ -101,7 +101,7 @@ class AssocChiens extends React.Component {
                                             <TouchableOpacity
                                                 onPress={() => {
                                                     this.props.navigation.navigate('MessageToAssoc', {
-                                                        ok: item.id_assoc
+                                                        idAssoc: item.id_assoc
                                                     })
                                                 }}>
                                                 <Text style={styles.submitButton}>Contacter {item.nom}</Text>

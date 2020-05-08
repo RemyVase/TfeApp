@@ -1,8 +1,6 @@
 import React, { Component, useState } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView, FlatList, TextInput, Image, AsyncStorage } from "react-native";
 
-
-
 class MessageToAssoc extends React.Component {
     constructor() {
         super();
@@ -11,6 +9,7 @@ class MessageToAssoc extends React.Component {
             mailUser: "",
             idUser: "",
             idAssocUser: "",
+            message: "",
         }
     }
 
@@ -29,8 +28,44 @@ class MessageToAssoc extends React.Component {
         this.setState({ idAssocUser: value4 });
     }
 
+    sendMessage = () => {
+        const { message } = this.state;
+        if (message == "") {
+            alert("Entrez votre pseudo");
+        }
+        else {
+
+            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/envoiMessageUserToAssocController.php', {
+                method: 'post',
+                header: {
+                    'Accept': 'application/json',
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: message,
+                    idAssocUserCo: this.state.idAssocUser,
+                    idEnvoyeur: this.state.idUser,
+                    idReceveur: this.props.route.params.idAssoc,
+                })
+
+            })
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    alert(responseJson);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+        //alert("Hanhanhan");
+    }
+
     render() {
+        let tis = this;
         let testLog = this.state.pseudoUser;
+        //let envoi = this.sendMessage();
+        
+
 
 
         function CheckSiCo() {
@@ -42,12 +77,14 @@ class MessageToAssoc extends React.Component {
                                 style={{ flex: 1, width: 270 }}
                                 placeholder="Ecrivez votre message ici !"
                                 multiline={true}
+                                value={tis.state.message}
+                                onChangeText={(message) => tis.setState({ message: message })}
                             />
                         </ScrollView>
                         <View style={{ flex: 1, justifyContent: 'flex-start' }}>
                             <View style={styles.submitContainer}>
                                 <TouchableOpacity
-                                    onPress={() => alert("YAHOUUUUUUU")}>
+                                    onPress={() => tis.sendMessage()}>
                                     <Text style={styles.submitButton}>Envoyer</Text>
                                 </TouchableOpacity>
                             </View>

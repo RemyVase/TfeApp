@@ -26,7 +26,6 @@ class Message extends React.Component {
             .then((response) => response.json())
             .then((responseJson) => {
                 this.setState({ listMessage: responseJson });
-                alert(responseJson[0]['contenu_message']);
             })
             .catch((error) => {
                 console.error(error);
@@ -50,7 +49,6 @@ class Message extends React.Component {
         const { test } = this.props.route.params;
         messages = this.state.listMessage;
         idUserCo = this.state.idUser;
-        //alert(this.props.route.params.idConv);
         //////////////////////////////////////////////////////////////////////////////
 
         function TriMsg(liste) {
@@ -58,7 +56,7 @@ class Message extends React.Component {
             const date = liste.date;
             const nom = liste.nom;
             const msg = liste.msg;
-            alert(envoyeur);
+            
             if (envoyeur != idUserCo) {
                 return (
                     <View style={styles.messageRecu}>
