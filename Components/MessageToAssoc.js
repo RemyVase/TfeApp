@@ -58,10 +58,6 @@ class MessageToAssoc extends React.Component {
     render() {
         let tis = this;
         let testLog = this.state.pseudoUser;
-        //let envoi = this.sendMessage();
-
-
-
 
         function CheckSiCo() {
             if (testLog != null) {
@@ -131,7 +127,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         margin: 70,
         marginTop: 150,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        borderRadius: 15,
     },
     messageAlert: {
         fontSize: 30,

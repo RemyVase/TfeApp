@@ -10,6 +10,7 @@ class Message extends React.Component {
             mailUser: "",
             pseudoUser: "",
             idAssocUser: "",
+            message: "",
         }
     }
 
@@ -42,6 +43,25 @@ class Message extends React.Component {
         this.setState({ mailUser: value2 });
         this.setState({ pseudoUser: value3 });
         this.setState({ idAssocUser: value4 });
+    }
+
+    envoieMessage(){
+        fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/envoieMessageMessagerieController.php', {
+                method: 'post',
+                header: {
+                    'Accept': 'application/json',
+                    'Content-type': 'application/json'
+                },
+                body: '{"idEnvoyeur": ' + this.state.idUser + ', "idConv" : ' + this.props.route.params.idConv + ', "message":"' + this.state.message + '"}'
+            })
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    this.componentDidMount();
+                    this.setState({message: ""});
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
     }
 
     render() {
@@ -90,8 +110,6 @@ class Message extends React.Component {
             }
         }
 
-
-
         return (
             <View style={{ flex: 1 }}>
                 <ScrollView style={styles.scroll}>
@@ -109,12 +127,13 @@ class Message extends React.Component {
                             style={{ height: 40 }}
                             placeholder="Ecrivez votre nouveau message ici..!"
                             multiline={true}
-
+                            value={this.state.message}
+                            onChangeText={(message) => this.setState({ message: message })}
                         />
                     </ScrollView>
                     <TouchableOpacity
                         style={styles.envoiButton}
-                        onPress={() => alert("Ahahahah")}>
+                        onPress={() => this.envoieMessage()}>
 
                         <View style={styles.zoneButton}>
                             <Image
