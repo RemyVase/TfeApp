@@ -6,18 +6,18 @@ $db = new dbAccess();
 $json = file_get_contents('php://input');
 $obj = json_decode($json, true);
 
-$idEnvoyeur = htmlspecialchars($obj["idEnvoyeur"]);
-$idReceveur = htmlspecialchars($obj['idReceveur']);
-$message = htmlspecialchars($obj['message']);
-$idAssocUserCo = htmlspecialchars($obj['idAssocUserCo']);
-
-var_dump($idAssocUserCo);
+$idEnvoyeur = ($obj["idEnvoyeur"]);
+$idReceveur = ($obj['idReceveur']);
+$message = ($obj['message']);
+$idAssocUserCo = ($obj['idAssocUserCo']);
 
 $checkUserConv = $db->callProcedure('messageCheckUserConv', [$idEnvoyeur, $idReceveur]);
-$checkAssocToAssocConv = $db->callProcedure('messageCheckAssocToAssocConv', [$idAssocUserCo, $idReceveur]);
 
+if(!is_null($idAssocUserCo)){
+    $checkAssocToAssocConv = $db->callProcedure('messageCheckAssocToAssocConv', [$idAssocUserCo, $idReceveur]);
+}
 
-if (empty($idAssocUserCo)) {
+if (is_null($idAssocUserCo)) {
     if (empty($checkUserConv)) {
         $conversation = $db->callProcedure('messageCreateConvers', [$idReceveur]);
         $idConvers = $db->callProcedure('messageTakeLastConvCree');
@@ -25,9 +25,11 @@ if (empty($idAssocUserCo)) {
             'id_convers'})]);
         $envoiMessage = $db->callProcedure('messageEnvoiMessage', [$idEnvoyeur, $idConvers[0]{
             'id_convers'}, $message]);
+            
     } else {
         $envoiMessage = $db->callProcedure('messageEnvoiMessage', [$idEnvoyeur, intval($checkUserConv[0]{
             'id_convers'}), $message]);
+            
     }
 } else {
     if (empty($checkAssocToAssocConv)) {
@@ -37,10 +39,15 @@ if (empty($idAssocUserCo)) {
             'id_convers'})]);
         $envoiMessage = $db->callProcedure('messageEnvoiMessage', [$idEnvoyeur, $idConvers[0]{
             'id_convers'}, $message]);
+            
     } else {
         $envoiMessage = $db->callProcedure('messageEnvoiMessage', [$idEnvoyeur, intval($checkAssocToAssocConv[0]{
             'id_convers'}), $message]);
+            
     }
 }
 
 echo json_encode("messageEnvoye");
+
+
+

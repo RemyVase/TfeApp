@@ -41,67 +41,68 @@ class MessageToAssoc extends React.Component {
                     'Accept': 'application/json',
                     'Content-type': 'application/json'
                 },
-                body: JSON.stringify({
-                    message: message,
-                    idAssocUserCo: this.state.idAssocUser,
-                    idEnvoyeur: this.state.idUser,
-                    idReceveur: this.props.route.params.idAssoc,
-                })
-
+                body: '{"message": "' + message + '", "idAssocUserCo": ' + this.state.idAssocUser +', "idEnvoyeur": ' + this.state.idUser + ', "idReceveur": "' + this.props.route.params.idAssoc + '"}'
             })
                 .then((response) => response.json())
                 .then((responseJson) => {
-                    alert(responseJson);
+                    if(responseJson === "messageEnvoye"){
+                        alert("Votre message à bien été envoyé à l'association.");
+                    }
                 })
                 .catch((error) => {
                     console.error(error);
                 });
         }
-        //alert("Hanhanhan");
     }
 
     render() {
         let tis = this;
         let testLog = this.state.pseudoUser;
         //let envoi = this.sendMessage();
-        
+
 
 
 
         function CheckSiCo() {
             if (testLog != null) {
                 return (
-                    <View style={styles.zoneBouton}>
-                        <ScrollView style={styles.zoneMessageInput}>
-                            <TextInput
-                                style={{ flex: 1, width: 270 }}
-                                placeholder="Ecrivez votre message ici !"
-                                multiline={true}
-                                value={tis.state.message}
-                                onChangeText={(message) => tis.setState({ message: message })}
-                            />
-                        </ScrollView>
-                        <View style={{ flex: 1, justifyContent: 'flex-start' }}>
-                            <View style={styles.submitContainer}>
-                                <TouchableOpacity
-                                    onPress={() => tis.sendMessage()}>
-                                    <Text style={styles.submitButton}>Envoyer</Text>
-                                </TouchableOpacity>
-                            </View>
+                    <View style={{ flex: 1, justifyContent: 'flex-start' }}>
+                        <View style={styles.submitContainer}>
+                            <TouchableOpacity
+                                onPress={() => tis.sendMessage()}>
+                                <Text style={styles.submitButton}>Envoyer</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 )
             } else {
                 return (
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={styles.messageAlert}>Vous devez vous connecter pour envoyer un message à une association.</Text>
+                    <View style={{ flex: 1, justifyContent: 'flex-start' }}>
+                        <View style={styles.submitContainer}>
+                            <TouchableOpacity
+                                onPress={() => alert("Vous devez être connecté pour pouvoir contacter une association.")}>
+                                <Text style={styles.submitButton}>Envoyer</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 )
             }
         }
         return (
 
-            <CheckSiCo />
+            <View style={styles.zoneBouton}>
+                <ScrollView style={styles.zoneMessageInput}>
+                    <TextInput
+                        style={{ flex: 1, width: 270 }}
+                        placeholder="Ecrivez votre message ici !"
+                        multiline={true}
+                        value={tis.state.message}
+                        onChangeText={(message) => tis.setState({ message: message })}
+                    />
+                </ScrollView>
+                <CheckSiCo />
+            </View>
+            
 
         )
     }
