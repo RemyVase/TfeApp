@@ -84,8 +84,8 @@ class Messagerie extends React.Component {
     getParsedDate(date) {
         date = String(date).split(' ');
         let dateSH = String(date[0]).split('-');
-        let jour= "";
-        let mois= "";
+        let jour = "";
+        let mois = "";
 
         let belleDate = dateSH[2] + '-' + dateSH[1] + '-' + parseInt(dateSH[0]);
         return belleDate;
@@ -99,6 +99,7 @@ class Messagerie extends React.Component {
             var pseudoEnvoyeur = '"' + tab[i]['pseudo_user'] + '"';
             //Si l'utilisateur connecté est l'envoyeur du dernier message j'essaie de récupérer le pseudo de l'utilisateur à qui il parle ou celui de l'association à qui il parle
             if (pseudoEnvoyeur === this.state.pseudoUser) {
+
                 fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/recupPseudoUserController.php', {
                     method: 'post',
                     header: {
@@ -111,27 +112,55 @@ class Messagerie extends React.Component {
                     .then((responseJson) => {
                         //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
                         if (responseJson[0] === undefined) {
+
+                            alert("seconde condition");
                             fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/recupPseudoAssocController.php', {
                                 method: 'post',
                                 header: {
                                     'Accept': 'application/json',
                                     'Content-type': 'application/json'
                                 },
-                                body: '{"idConv": "' + tab[i]['id_convers'] + '", "idAssocCo" : ' + this.state.idAssocUser + '}'
+                                body: '{"idConv": "' + tab[i]['id_convers'] + '", "idAssocCo" : ' + (this.state.idAssocUser === "null" ? 3000000 : this.state.idAssocUser) + '}'
                             })
                                 .then((response) => response.json())
                                 .then((responseJson2) => {
+                                    alert(responseJson2[0][0]);
                                     //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
                                     if (responseJson2[0] != undefined) {
                                         pseudoAssocConvers = responseJson2[0]["nom_assoc"];
-                                        tab[i]["pseudo_user"] = responseJson2[0][0];
-
+                                        tab[i]["pseudo_user"] = pseudoAssocConvers;
+                                        //alert(pseudoAssocConvers);
                                     }
                                 })
                                 .catch((error) => {
                                     console.error(error);
                                 });
-                        } else {
+
+                        } else if ('"' + responseJson[0]['pseudo_user'] + '"' === this.state.pseudoUser) {
+                            alert("seconde condition");
+                            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/recupPseudoAssocController.php', {
+                                method: 'post',
+                                header: {
+                                    'Accept': 'application/json',
+                                    'Content-type': 'application/json'
+                                },
+                                body: '{"idConv": "' + tab[i]['id_convers'] + '", "idAssocCo" : ' + (this.state.idAssocUser === "null" ? 3000000 : this.state.idAssocUser) + '}'
+                            })
+                                .then((response) => response.json())
+                                .then((responseJson2) => {
+                                    alert(responseJson2[0][0]);
+                                    //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
+                                    if (responseJson2[0] != undefined) {
+                                        pseudoAssocConvers = responseJson2[0]["nom_assoc"];
+                                        tab[i]["pseudo_user"] = pseudoAssocConvers;
+                                        //alert(pseudoAssocConvers);
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error(error);
+                                });
+                        }
+                        else {
                             pseudoUserConvers = responseJson[0]["pseudo_user"];
                             tab[i]["pseudo_user"] = responseJson[0]["pseudo_user"];
                         }
@@ -190,7 +219,7 @@ class Messagerie extends React.Component {
 
         function CheckSiCo() {
             if (testLog != null) {
-                if (state.idAssocUser === "null") {
+                if (state.idAssocUser === "NULL") {
                     return (
                         <View style={{ flex: 1 }}>
                             <ImageBackground
@@ -209,7 +238,7 @@ class Messagerie extends React.Component {
                                                     idConv: item.id_convers
                                                 })
                                             }}>
-                                            <View style={styles.caseMessage}>
+                                            <View style={item.lu_destinataire === 1 ? styles.caseMessage : styles.caseMessage2}>
                                                 <View style={styles.zoneNomContact}>
                                                     <Text style={styles.nomContact}>{item.nom_assoc}</Text>
                                                 </View>
@@ -246,7 +275,7 @@ class Messagerie extends React.Component {
                                                     idConv: item.id_convers
                                                 })
                                             }}>
-                                            <View style={styles.caseMessage}>
+                                            <View style={item.lu_destinataire === 1 ? styles.caseMessage : styles.caseMessage2}>
                                                 <View style={styles.zoneNomContact}>
                                                     <Text style={styles.nomContact}>{item.pseudo_user}</Text>
                                                 </View>
@@ -291,6 +320,21 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         borderRadius: 25,
         backgroundColor: 'white',
+        borderWidth: 0.3,
+        marginTop: 10,
+        opacity: 0.9,
+        shadowColor: "#000",
+        shadowOpacity: 0.58,
+        shadowRadius: 1,
+        elevation: -24,
+    },
+    caseMessage2: {
+        alignSelf: 'stretch',
+        height: 80,
+        flex: 1,
+        flexDirection: 'column',
+        borderRadius: 25,
+        backgroundColor: 'red',
         borderWidth: 0.3,
         marginTop: 10,
         opacity: 0.9,
