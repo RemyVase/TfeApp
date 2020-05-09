@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, AsyncStorage } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, AsyncStorage, ImageBackground } from "react-native";
 import { NavigationEvents } from "react-navigation";
 
 class Compte extends React.Component {
@@ -43,34 +43,45 @@ class Compte extends React.Component {
         var nav = this.props;
         var deco = this.deconnexion;
         var back = this.onBack;
+        const image = { source: "https://reactjs.org/logo-og.png" };
 
 
 
         function CheckSiCo() {
             if (testLog != null) {
                 return (
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
+                        <ImageBackground
+                            source={require('../img/backImage.jpg')}
+                            style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
+                        >
+                        </ImageBackground>
                         <View style={styles.submitContainer}>
                             <TouchableOpacity
                                 onPress={deco}>
                                 <Text style={styles.submitButton}>Déconnexion</Text>
                             </TouchableOpacity>
                         </View>
-                    </View>
+                    </View >
                 )
             } else {
                 return (
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <ImageBackground
+                            source={require('../img/backImage.jpg')}
+                            style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
+                        >
+                        </ImageBackground>
                         <View style={styles.submitContainer}>
                             <TouchableOpacity
+
                                 onPress={() => nav.navigation.navigate('Inscription')}>
                                 <Text style={styles.submitButton}>Inscription</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.submitContainer}>
                             <TouchableOpacity
-                                onPress={() => nav.navigation.navigate('Connexion',{ onBack: back.bind(this) })}>
+                                onPress={() => nav.navigation.navigate('Connexion', { onBack: back.bind(this) })}>
                                 <Text style={styles.submitButton}>Connexion</Text>
                             </TouchableOpacity>
                         </View>
@@ -89,14 +100,16 @@ class Compte extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignContent: 'center'
+        alignContent: 'center',
+
     },
     submitButton: {
         width: 100,
         borderRadius: 25,
         paddingVertical: 13,
         textAlign: 'center',
-        color: '#FFFFFF'
+        color: '#FFFFFF',
+
     },
     submitContainer: {
         backgroundColor: "#6D071A",
