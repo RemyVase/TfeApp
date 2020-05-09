@@ -20,6 +20,8 @@ if ($checkEnvoyeurLastMessage[0]{'id_envoyeur'} != $idUserCo) {
     if ($checkAssocUser[0]{'id_assoc'} != $idAssocUserCo) {
         $messageLu = $db->callProcedure('messageLu', [$idConv]);
         echo json_encode("messageLu");
+    }else{
+        echo json_encode("messagePasLu");
     }
 } else {
     echo json_encode("messagePasLu");
