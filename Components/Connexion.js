@@ -73,23 +73,25 @@ class Connexion extends React.Component {
                     style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
                 >
                 </ImageBackground>
-                <View style={styles.container2}>
-                    <Text style={styles.label}>Pseudo :</Text>
-                    <TextInput
-                        style={styles.inputStyle}
-                        value={this.state.pseudo}
-                        onChangeText={(pseudo) => this.setState({ pseudo: pseudo })}
-                    >
-                    </TextInput>
-                </View>
-                <View style={styles.container2}>
-                    <Text style={styles.label}>Mot de passe :</Text>
-                    <TextInput
-                        style={styles.inputStyle}
-                        value={this.state.mdp}
-                        onChangeText={(mdp) => this.setState({ mdp: mdp })}
-                    >
-                    </TextInput>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={styles.container2}>
+                        <Text style={styles.label}>Pseudo :</Text>
+                        <TextInput
+                            style={styles.inputStyle}
+                            value={this.state.pseudo}
+                            onChangeText={(pseudo) => this.setState({ pseudo: pseudo })}
+                        >
+                        </TextInput>
+                    </View>
+                    <View style={styles.container2}>
+                        <Text style={styles.label}>Mot de passe :</Text>
+                        <TextInput
+                            style={styles.inputStyle}
+                            value={this.state.mdp}
+                            onChangeText={(mdp) => this.setState({ mdp: mdp })}
+                        >
+                        </TextInput>
+                    </View>
                 </View>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <View style={styles.submitContainer}>
@@ -108,29 +110,37 @@ class Connexion extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignContent: 'center'
+        alignContent: 'center',
+        justifyContent: 'center'
     },
     submitButton: {
         width: 100,
         borderRadius: 25,
         paddingVertical: 13,
         textAlign: 'center',
-        color: '#FFFFFF'
+        color: '#FFFFFF',
+        
     },
     submitContainer: {
         backgroundColor: "#6D071A",
         borderRadius: 25,
         marginVertical: 10,
+        top : -100
     },
     container2: {
-        backgroundColor: "transparent",
+        backgroundColor: "white",
         flexDirection: "row",
         paddingLeft: 16,
         borderColor: "#D9D5DC",
-        borderBottomWidth: 1
+        borderWidth: 1,
+        borderRadius: 30,
+        width: 320,
+        opacity: 0.9,
+        top: 150,
+        marginTop : 10
     },
     label: {
-        width: 223,
+        width: 120,
         height: 40,
         color: "#000",
         alignSelf: "flex-start",
@@ -138,10 +148,10 @@ const styles = StyleSheet.create({
         paddingTop: 16,
         paddingBottom: 8,
         fontSize: 16,
-        lineHeight: 16
+        lineHeight: 16,
     },
     inputStyle: {
-        width: 282,
+        width: 300,
         height: 42,
         color: "#000",
         alignSelf: "stretch",
@@ -150,7 +160,7 @@ const styles = StyleSheet.create({
         paddingBottom: 8,
         paddingLeft: 30,
         fontSize: 16,
-        lineHeight: 16
+        lineHeight: 16,
     },
     imgBack: {
         width: '100%',
