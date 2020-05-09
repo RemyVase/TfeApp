@@ -27,6 +27,7 @@ class Messagerie extends React.Component {
             this._loadInitialState().done();
             //let tab = this.recupNomOuAssoc();
             this.setState({ listConversCorrect: this.recupNomOuAssoc() });
+
         });
 
     }
@@ -178,8 +179,6 @@ class Messagerie extends React.Component {
         }
         return tab;
     }
-
-
 
     render() {
         const testLog = this.state.pseudoUser;

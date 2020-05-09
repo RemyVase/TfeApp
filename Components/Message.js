@@ -52,6 +52,7 @@ class Message extends React.Component {
             tab[i]['date_message'] = date;
         }
         this.setState({ listMessage: tab });
+        this.messageLu();
     }
 
     envoieMessage() {
@@ -73,12 +74,27 @@ class Message extends React.Component {
             });
     }
 
+    messageLu() {
+        fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/messageLuController.php', {
+            method: 'post',
+            header: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json'
+            },
+            body: '{"idUserCo": ' + this.state.idUser + ', "idConv" : ' + this.props.route.params.idConv + ', "idAssocUserCo":' + this.state.idAssocUser + '}'
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
     getParsedDate(date) {
         date = String(date).split(' ');
         let dateSH = String(date[0]).split('-');
         let heure = String(date[1].split(':'));
-        let jour = "";
-        let mois = "";
 
         let belleDate = dateSH[2] + '-' + dateSH[1] + '-' + parseInt(dateSH[0]) + " " + heure[0] + heure[1] + ":" + heure[3] + heure[4];
         return belleDate;
@@ -139,32 +155,32 @@ class Message extends React.Component {
                         data={messages}
                         keyExtractor={(item) => item.id_message}
                         renderItem={({ item }) =>
-                    <TriMsg envoyeur={item.id_envoyeur} date={item.date_message} nom={item.pseudo_user} msg={item.contenu_message} />
-                }
+                            <TriMsg envoyeur={item.id_envoyeur} date={item.date_message} nom={item.pseudo_user} msg={item.contenu_message} />
+                        }
                     />
                 </ScrollView>
-            <View style={styles.zoneNewMessage}>
-                <ScrollView style={styles.inputText}>
-                    <TextInput
-                        style={{ height: 40 }}
-                        placeholder="Ecrivez votre nouveau message ici..!"
-                        multiline={true}
-                        value={this.state.message}
-                        onChangeText={(message) => this.setState({ message: message })}
-                    />
-                </ScrollView>
-                <TouchableOpacity
-                    style={styles.envoiButton}
-                    onPress={() => this.envoieMessage()}>
-
-                    <View style={styles.zoneButton}>
-                        <Image
-                            source={require('../assets/iconEnvoi.png')}
+                <View style={styles.zoneNewMessage}>
+                    <ScrollView style={styles.inputText}>
+                        <TextInput
+                            style={{ height: 40 }}
+                            placeholder="Ecrivez votre nouveau message ici..!"
+                            multiline={true}
+                            value={this.state.message}
+                            onChangeText={(message) => this.setState({ message: message })}
                         />
-                    </View>
+                    </ScrollView>
+                    <TouchableOpacity
+                        style={styles.envoiButton}
+                        onPress={() => this.envoieMessage()}>
 
-                </TouchableOpacity>
-            </View>
+                        <View style={styles.zoneButton}>
+                            <Image
+                                source={require('../assets/iconEnvoi.png')}
+                            />
+                        </View>
+
+                    </TouchableOpacity>
+                </View>
             </View >
 
 
