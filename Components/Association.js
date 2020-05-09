@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight, FlatList, ScrollView, Image, AsyncStorage } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight, FlatList, ScrollView, Image, AsyncStorage,ImageBackground } from 'react-native';
 
 class Association extends React.Component {
-    
+
     constructor(props) {
         super(props);
         this.state = {
@@ -36,7 +36,12 @@ class Association extends React.Component {
     render() {
 
         return (
-            <View>
+            <View style={{flex: 1}}>
+                <ImageBackground
+                    source={require('../img/backImage.jpg')}
+                    style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
+                >
+                </ImageBackground>
                 <ScrollView style={styles.scroll}>
                     <FlatList
                         data={this.state.listeAssoc}
@@ -161,6 +166,17 @@ const styles = StyleSheet.create({
     submitContainer: {
         backgroundColor: "#6D071A",
         borderRadius: 25,
+    },
+    imgBack: {
+        width: '100%',
+        height: '80%',
+        resizeMode: 'repeat',
+        justifyContent: 'center',
+        alignItems: 'center',
+        right: 20,
+        top: 120,
+        opacity: 0.2,
+        position: 'absolute',
     }
 });
 

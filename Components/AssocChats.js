@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight, FlatList, ScrollView, Image } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight, FlatList, ScrollView, Image, ImageBackground } from 'react-native';
 
 const ASSOC = [
     {
@@ -68,7 +68,12 @@ class AssocChats extends React.Component {
     render() {
 
         return (
-            <View>
+            <View style={{flex: 1}}>
+                <ImageBackground
+                    source={require('../img/backImage.jpg')}
+                    style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
+                >
+                </ImageBackground>
                 <ScrollView style={styles.scroll}>
                     <FlatList
                         data={this.state.listeAssoc}
@@ -194,6 +199,17 @@ const styles = StyleSheet.create({
     submitContainer: {
         backgroundColor: "#6D071A",
         borderRadius: 25,
+    },
+    imgBack: {
+        width: '100%',
+        height: '80%',
+        resizeMode: 'repeat',
+        justifyContent: 'center',
+        alignItems: 'center',
+        right: 20,
+        top: 120,
+        opacity: 0.2,
+        position: 'absolute',
     }
 });
 

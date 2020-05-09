@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, AsyncStorage } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, AsyncStorage, ImageBackground } from "react-native";
 import { NavigationEvents } from "react-navigation";
 
 
@@ -68,8 +68,13 @@ class Connexion extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                <ImageBackground
+                    source={require('../img/backImage.jpg')}
+                    style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
+                >
+                </ImageBackground>
                 <View style={styles.container2}>
-                    <Text style={styles.label}>Pseudo</Text>
+                    <Text style={styles.label}>Pseudo :</Text>
                     <TextInput
                         style={styles.inputStyle}
                         value={this.state.pseudo}
@@ -78,7 +83,7 @@ class Connexion extends React.Component {
                     </TextInput>
                 </View>
                 <View style={styles.container2}>
-                    <Text style={styles.label}>Mot de passe</Text>
+                    <Text style={styles.label}>Mot de passe :</Text>
                     <TextInput
                         style={styles.inputStyle}
                         value={this.state.mdp}
@@ -146,6 +151,17 @@ const styles = StyleSheet.create({
         paddingLeft: 30,
         fontSize: 16,
         lineHeight: 16
+    },
+    imgBack: {
+        width: '100%',
+        height: '80%',
+        resizeMode: 'repeat',
+        justifyContent: 'center',
+        alignItems: 'center',
+        right: 20,
+        top: 120,
+        opacity: 0.2,
+        position: 'absolute',
     }
 });
 

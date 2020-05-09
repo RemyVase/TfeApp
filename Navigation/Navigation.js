@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { ReactElement } from 'react';
-import { StyleSheet, TouchableOpacity, Button, Text, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, Button, Text, View, ImageBackground } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -25,6 +25,11 @@ const AssociationStack = createStackNavigator();
 function TypeAnimalTrouveScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <ImageBackground
+        source={require('../img/backImage.jpg')}
+        style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
+      >
+      </ImageBackground>
       <View style={styles.submitContainer}>
         <TouchableOpacity
           onPress={() => navigation.navigate('AssocChats')}>
@@ -44,6 +49,11 @@ function AnimalSauveScreen({ navigation }) {
   return (
 
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <ImageBackground
+        source={require('../img/backImage.jpg')}
+        style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
+      >
+      </ImageBackground>
       <View style={styles.submitContainer}>
         <TouchableOpacity
           onPress={() => navigation.navigate('TypeAnimalTrouveScreen')}>
@@ -119,7 +129,7 @@ function MyTabs() {
             <MaterialCommunityIcons name="alert-octagon" color={color} size={size} />
           )
         }}
-        
+
       />
       <Tab.Screen
         name="Association"
@@ -176,6 +186,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#6D071A",
     borderRadius: 25,
     marginVertical: 10,
+  },
+  imgBack: {
+    width: '100%',
+    height: '80%',
+    resizeMode: 'repeat',
+    justifyContent: 'center',
+    alignItems: 'center',
+    right: 20,
+    top: 120,
+    opacity: 0.2,
+    position: 'absolute',
   }
 
 });

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight, FlatList, ScrollView, Image, AsyncStorage } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight, FlatList, ScrollView, Image, AsyncStorage,ImageBackground } from 'react-native';
 import Message from '../Components/Message';
 
 class Messagerie extends React.Component {
@@ -25,7 +25,7 @@ class Messagerie extends React.Component {
         const checkSiRetourSurCetEcran = this.props.navigation.addListener('focus', e => {
             this._loadInitialState().done();
             //let tab = this.recupNomOuAssoc();
-            this.setState({ listConversCorrect : this.recupNomOuAssoc() });
+            this.setState({ listConversCorrect: this.recupNomOuAssoc() });
         });
 
     }
@@ -80,7 +80,7 @@ class Messagerie extends React.Component {
     }
 
     //Fonction permettant de savoir si l'utilisateur est le dernier envoyeur afin d'afficher un bon nom de conversation
-    recupNomOuAssoc(){
+    recupNomOuAssoc() {
         let tab = this.state.listConvers;
         //Boucle pour parcourir la liste de conversation
         for (let i = 0; i < tab.length; i++) {
@@ -113,7 +113,7 @@ class Messagerie extends React.Component {
                                     if (responseJson2[0] != undefined) {
                                         pseudoAssocConvers = responseJson2[0]["nom_assoc"];
                                         tab[i]["pseudo_user"] = responseJson2[0][0];
-                                    
+
                                     }
                                 })
                                 .catch((error) => {
@@ -167,7 +167,7 @@ class Messagerie extends React.Component {
     }
 
 
-    
+
     render() {
         const testLog = this.state.pseudoUser;
         const estDansAssoc = this.state.idAssocUser;
@@ -180,7 +180,12 @@ class Messagerie extends React.Component {
             if (testLog != null) {
                 if (state.idAssocUser === "null") {
                     return (
-                        <View>
+                        <View style={{flex: 1}}>
+                            <ImageBackground
+                                source={require('../img/backImage.jpg')}
+                                style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
+                            >
+                            </ImageBackground>
                             <ScrollView style={styles.scroll}>
                                 <FlatList
                                     data={state.listConversCorrect}
@@ -212,7 +217,12 @@ class Messagerie extends React.Component {
                     )
                 } else {
                     return (
-                        <View>
+                        <View style={{flex: 1}}>
+                            <ImageBackground
+                                source={require('../img/backImage.jpg')}
+                                style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
+                            >
+                            </ImageBackground>
                             <ScrollView style={styles.scroll}>
                                 <FlatList
                                     data={state.listConversCorrect}
@@ -313,6 +323,17 @@ const styles = StyleSheet.create({
         color: 'red',
         fontWeight: 'bold',
         textAlign: 'center',
+    },
+    imgBack: {
+        width: '100%',
+        height: '80%',
+        resizeMode: 'repeat',
+        justifyContent: 'center',
+        alignItems: 'center',
+        right: 20,
+        top: 120,
+        opacity: 0.2,
+        position: 'absolute',
     }
 });
 

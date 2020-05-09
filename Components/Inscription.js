@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TextInput } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, TextInput,ImageBackground } from "react-native";
 
 class Inscription extends React.Component {
     constructor(props) {
@@ -32,7 +32,7 @@ class Inscription extends React.Component {
         else if (mdp == "") {
             alert("Entrez votre mot de passe.");
         }
-        else if(confirmMdp ==""){
+        else if (confirmMdp == "") {
             alert("Entrez votre confirmation de mot de passe.")
         }
         else if (mdp != confirmMdp) {
@@ -76,6 +76,11 @@ class Inscription extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                <ImageBackground
+                    source={require('../img/backImage.jpg')}
+                    style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
+                >
+                </ImageBackground>
                 <View style={styles.container2}>
                     <Text style={styles.label}>Pseudo</Text>
                     <TextInput
@@ -174,6 +179,17 @@ const styles = StyleSheet.create({
         paddingLeft: 30,
         fontSize: 16,
         lineHeight: 16
+    },
+    imgBack: {
+        width: '100%',
+        height: '80%',
+        resizeMode: 'repeat',
+        justifyContent: 'center',
+        alignItems: 'center',
+        right: 20,
+        top: 120,
+        opacity: 0.2,
+        position: 'absolute',
     }
 });
 

@@ -50,7 +50,7 @@ class Compte extends React.Component {
         function CheckSiCo() {
             if (testLog != null) {
                 return (
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                         <ImageBackground
                             source={require('../img/backImage.jpg')}
                             style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
@@ -69,7 +69,7 @@ class Compte extends React.Component {
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                         <ImageBackground
                             source={require('../img/backImage.jpg')}
-                            style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
+                            style={styles.imgBack}
                         >
                         </ImageBackground>
                         <View style={styles.submitContainer}>
@@ -115,6 +115,17 @@ const styles = StyleSheet.create({
         backgroundColor: "#6D071A",
         borderRadius: 25,
         marginVertical: 10,
+    },
+    imgBack: {
+        width: '100%',
+        height: '80%',
+        resizeMode: 'repeat',
+        justifyContent: 'center',
+        alignItems: 'center',
+        right: 20,
+        top: 120,
+        opacity: 0.2,
+        position: 'absolute',
     }
 });
 
