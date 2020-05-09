@@ -88,6 +88,7 @@ class Connexion extends React.Component {
                         <TextInput
                             style={styles.inputStyle}
                             value={this.state.mdp}
+                            secureTextEntry={true}
                             onChangeText={(mdp) => this.setState({ mdp: mdp })}
                         >
                         </TextInput>
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#6D071A",
         borderRadius: 25,
         marginVertical: 10,
-        top : -100
+        top : -120
     },
     container2: {
         backgroundColor: "white",
@@ -136,11 +137,11 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         width: 320,
         opacity: 0.9,
-        top: 150,
+        top: 120,
         marginTop : 10
     },
     label: {
-        width: 120,
+        width: 110,
         height: 40,
         color: "#000",
         alignSelf: "flex-start",
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
         lineHeight: 16,
     },
     inputStyle: {
-        width: 300,
+        width: 180,
         height: 42,
         color: "#000",
         alignSelf: "stretch",
