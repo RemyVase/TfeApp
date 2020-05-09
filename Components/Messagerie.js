@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight, FlatList, ScrollView, Image, AsyncStorage,ImageBackground } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight, FlatList, ScrollView, Image, AsyncStorage, ImageBackground } from 'react-native';
 import Message from '../Components/Message';
+import { format } from "date-fns";
 
 class Messagerie extends React.Component {
     constructor(props) {
@@ -77,6 +78,16 @@ class Messagerie extends React.Component {
                     console.error(error);
                 });
         }
+    }
+
+    getParsedDate(date) {
+        date = String(date).split(' ');
+        let dateSH = String(date[0]).split('-');
+        let jour= "";
+        let mois= "";
+
+        let belleDate = dateSH[2] + '-' + dateSH[1] + '-' + parseInt(dateSH[0]);
+        return belleDate;
     }
 
     //Fonction permettant de savoir si l'utilisateur est le dernier envoyeur afin d'afficher un bon nom de conversation
@@ -162,6 +173,8 @@ class Messagerie extends React.Component {
                         }
                     });
             }
+            let date = this.getParsedDate(tab[i]["date_message"]);
+            tab[i]['date_message'] = date;
         }
         return tab;
     }
@@ -180,7 +193,7 @@ class Messagerie extends React.Component {
             if (testLog != null) {
                 if (state.idAssocUser === "null") {
                     return (
-                        <View style={{flex: 1}}>
+                        <View style={{ flex: 1 }}>
                             <ImageBackground
                                 source={require('../img/backImage.jpg')}
                                 style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
@@ -217,7 +230,7 @@ class Messagerie extends React.Component {
                     )
                 } else {
                     return (
-                        <View style={{flex: 1}}>
+                        <View style={{ flex: 1 }}>
                             <ImageBackground
                                 source={require('../img/backImage.jpg')}
                                 style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
@@ -275,10 +288,17 @@ const styles = StyleSheet.create({
     caseMessage: {
         alignSelf: 'stretch',
         height: 80,
-        borderBottomWidth: 1,
         flex: 1,
         flexDirection: 'column',
-        //borderRadius: 25,
+        borderRadius: 25,
+        backgroundColor: 'white',
+        borderWidth: 0.3,
+        marginTop: 10,
+        opacity: 0.9,
+        shadowColor: "#000",
+        shadowOpacity: 0.58,
+        shadowRadius: 1,
+        elevation: -24,
     },
     scroll: {
         paddingLeft: 10,
@@ -293,13 +313,13 @@ const styles = StyleSheet.create({
     dateMsg: {
         fontSize: 15,
         color: 'grey',
-        marginRight: 5,
+        marginRight: 10,
         marginBottom: 5
     },
     lastMsg: {
         fontSize: 15,
         color: 'grey',
-        marginLeft: 5,
+        marginLeft: 10,
         marginBottom: 5,
     },
     zoneMessage: {
@@ -309,10 +329,12 @@ const styles = StyleSheet.create({
     },
     zoneNomContact: {
         flex: 1,
+        marginLeft: 10
     },
     zoneLastMessage: {
         justifyContent: "flex-end",
-        alignItems: 'flex-start'
+        alignItems: 'flex-start',
+        width: 180
     },
     zoneHeure: {
         justifyContent: "flex-end",

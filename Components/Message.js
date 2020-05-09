@@ -31,6 +31,7 @@ class Message extends React.Component {
             .catch((error) => {
                 console.error(error);
             });
+
     }
 
     _loadInitialState = async () => {
@@ -43,25 +44,44 @@ class Message extends React.Component {
         this.setState({ mailUser: value2 });
         this.setState({ pseudoUser: value3 });
         this.setState({ idAssocUser: value4 });
+
+        let tab = this.state.listMessage;
+        let date = "";
+        for (let i = 0; i < tab.length; i++) {
+            date = this.getParsedDate(tab[i]['date_message']);
+            tab[i]['date_message'] = date;
+        }
+        this.setState({ listMessage: tab });
     }
 
-    envoieMessage(){
+    envoieMessage() {
         fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/envoieMessageMessagerieController.php', {
-                method: 'post',
-                header: {
-                    'Accept': 'application/json',
-                    'Content-type': 'application/json'
-                },
-                body: '{"idEnvoyeur": ' + this.state.idUser + ', "idConv" : ' + this.props.route.params.idConv + ', "message":"' + this.state.message + '"}'
+            method: 'post',
+            header: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json'
+            },
+            body: '{"idEnvoyeur": ' + this.state.idUser + ', "idConv" : ' + this.props.route.params.idConv + ', "message":"' + this.state.message + '"}'
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.componentDidMount();
+                this.setState({ message: "" });
             })
-                .then((response) => response.json())
-                .then((responseJson) => {
-                    this.componentDidMount();
-                    this.setState({message: ""});
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
+    getParsedDate(date) {
+        date = String(date).split(' ');
+        let dateSH = String(date[0]).split('-');
+        let heure = String(date[1].split(':'));
+        let jour = "";
+        let mois = "";
+
+        let belleDate = dateSH[2] + '-' + dateSH[1] + '-' + parseInt(dateSH[0]) + " " + heure[0] + heure[1] + ":" + heure[3] + heure[4];
+        return belleDate;
     }
 
     render() {
@@ -76,7 +96,7 @@ class Message extends React.Component {
             const date = liste.date;
             const nom = liste.nom;
             const msg = liste.msg;
-            
+
             if (envoyeur != idUserCo) {
                 return (
                     <View style={styles.messageRecu}>
@@ -112,38 +132,40 @@ class Message extends React.Component {
 
         return (
             <View style={{ flex: 1 }}>
-                <ScrollView style={styles.scroll}>
+                <ScrollView style={styles.scroll}
+                    ref={ref => { this.scrollView = ref }}
+                    onContentSizeChange={() => this.scrollView.scrollToEnd({ animated: true })}>
                     <FlatList
                         data={messages}
-                        keyExtractor={(item) => item.date_message}
+                        keyExtractor={(item) => item.id_message}
                         renderItem={({ item }) =>
-                            <TriMsg envoyeur={item.id_envoyeur} date={item.date_message} nom={item.pseudo_user} msg={item.contenu_message} />
-                        }
+                    <TriMsg envoyeur={item.id_envoyeur} date={item.date_message} nom={item.pseudo_user} msg={item.contenu_message} />
+                }
                     />
                 </ScrollView>
-                <View style={styles.zoneNewMessage}>
-                    <ScrollView style={styles.inputText}>
-                        <TextInput
-                            style={{ height: 40 }}
-                            placeholder="Ecrivez votre nouveau message ici..!"
-                            multiline={true}
-                            value={this.state.message}
-                            onChangeText={(message) => this.setState({ message: message })}
+            <View style={styles.zoneNewMessage}>
+                <ScrollView style={styles.inputText}>
+                    <TextInput
+                        style={{ height: 40 }}
+                        placeholder="Ecrivez votre nouveau message ici..!"
+                        multiline={true}
+                        value={this.state.message}
+                        onChangeText={(message) => this.setState({ message: message })}
+                    />
+                </ScrollView>
+                <TouchableOpacity
+                    style={styles.envoiButton}
+                    onPress={() => this.envoieMessage()}>
+
+                    <View style={styles.zoneButton}>
+                        <Image
+                            source={require('../assets/iconEnvoi.png')}
                         />
-                    </ScrollView>
-                    <TouchableOpacity
-                        style={styles.envoiButton}
-                        onPress={() => this.envoieMessage()}>
+                    </View>
 
-                        <View style={styles.zoneButton}>
-                            <Image
-                                source={require('../assets/iconEnvoi.png')}
-                            />
-                        </View>
-
-                    </TouchableOpacity>
-                </View>
+                </TouchableOpacity>
             </View>
+            </View >
 
 
 
@@ -153,7 +175,7 @@ class Message extends React.Component {
 
 const styles = StyleSheet.create({
     scroll: {
-        flex: 0.7,
+        flex: 1,
     },
     messageRecu: {
         backgroundColor: 'white',
@@ -163,7 +185,12 @@ const styles = StyleSheet.create({
         width: 250,
         flex: 1,
         padding: 6,
-        marginLeft: 5
+        marginLeft: 5,
+        shadowColor: "#000",
+        shadowOpacity: 0.58,
+        shadowRadius: 5.00,
+        elevation: 24,
+        borderWidth: 0.3
     },
     alignementDroitEnvoye: {
         alignItems: 'flex-end',
@@ -175,7 +202,12 @@ const styles = StyleSheet.create({
         flex: 1,
         width: 250,
         padding: 6,
-        marginRight: 5
+        marginRight: 5,
+        shadowColor: "#000",
+        shadowOpacity: 0.58,
+        shadowRadius: 5.00,
+        elevation: 24,
+        borderWidth: 0.3
     },
     zoneTextMessage: {
         flex: 1,
