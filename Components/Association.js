@@ -11,6 +11,7 @@ class Association extends React.Component {
             idUser: "",
             idAssocUser: "",
             listeAssoc: [],
+            listeAssocCorrect: [],
         }
     }
 
@@ -26,10 +27,23 @@ class Association extends React.Component {
             .then((responseJson) => {
                 //console.log(responseJson);
                 this.setState({ listeAssoc: responseJson });
+                this.setState({listeAssocCorrect : this.changeImage()});
             })
             .catch((error) => {
                 console.error(error);
             });
+        
+        
+    }
+
+    changeImage(){
+        let tab = this.state.listeAssoc;
+        for(let i=0; i < tab.length; i++){
+            let image = tab[i]['img'].substring(2);
+            let lienImage = "https://www.sapandfriends.be/flash" + image;
+            tab[i]['img'] = lienImage;
+        }
+        return tab;
     }
 
 
@@ -44,14 +58,14 @@ class Association extends React.Component {
                 </ImageBackground>
                 <ScrollView style={styles.scroll}>
                     <FlatList
-                        data={this.state.listeAssoc}
+                        data={this.state.listeAssocCorrect}
                         keyExtractor={(item) => item.id_assoc}
                         renderItem={({ item }) =>
                             <View style={styles.caseAssoc}>
                                 <View>
                                     <Image
                                         style={styles.imgAssoc}
-                                        source={{ uri: 'http://localhost:8878/TFE-RemyVase/TFE-Ephec-2019-2020/flash/img/img_assoc/chatAdopte7100462.jpeg' }}
+                                        source={{ uri: item.img }}
                                     />
                                     <View style={styles.zonePlace}>
                                         <Text style={styles.stylePlaceTitre}>Places disponibles :</Text>
