@@ -94,10 +94,15 @@ const styles = StyleSheet.create({
     caseAssoc: {
         alignSelf: 'stretch',
         height: 250,
-        borderBottomWidth: 1,
+        borderWidth: 1,
         flex: 1,
         flexDirection: 'row',
-        //borderRadius: 25,
+        backgroundColor: "white",
+        borderRadius: 25,
+        opacity: 0.9,
+        marginBottom: 10,
+        marginTop: 5
+
     },
     nomAssoc: {
         flex: 1,
@@ -109,7 +114,8 @@ const styles = StyleSheet.create({
         width: 140,
         height: 140,
         resizeMode: 'contain',
-        marginTop: 7
+        marginTop: 7,
+        left: 5
 
     },
     scroll: {

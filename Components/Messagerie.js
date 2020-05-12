@@ -127,6 +127,7 @@ class Messagerie extends React.Component {
                                     if (responseJson2[0] != undefined) {
                                         pseudoAssocConvers = responseJson2[0]["nom_assoc"];
                                         tab[i]["pseudo_user"] = pseudoAssocConvers;
+                                        tab[i]['lu_destinataire'] = "1";
                                     }
                                 })
                                 .catch((error) => {
@@ -148,6 +149,7 @@ class Messagerie extends React.Component {
                                     if (responseJson2[0] != undefined) {
                                         pseudoAssocConvers = responseJson2[0]["nom_assoc"];
                                         tab[i]["pseudo_user"] = pseudoAssocConvers;
+                                        tab[i]['lu_destinataire'] = "1";
                                     }
                                 })
                                 .catch((error) => {
@@ -157,11 +159,13 @@ class Messagerie extends React.Component {
                         else {
                             pseudoUserConvers = responseJson[0]["pseudo_user"];
                             tab[i]["pseudo_user"] = responseJson[0]["pseudo_user"];
+                            tab[i]['lu_destinataire'] = "1";
                         }
                     })
                     .catch((error) => {
                         console.error(error);
                     });
+                tab[i]['lu_destinataire'] = "1";
                 //Je remplace le pseudo envoyeur par le bon pseudo pour bien afficher
                 //On ne peux modifier directement l'array du state donc je créé un nouveau tableau sur base de celui du state et je le modifier avant de setstate
             } else {
@@ -188,7 +192,7 @@ class Messagerie extends React.Component {
                                     .then((response) => response.json())
                                     .then((responseJson2) => {
                                         if (responseJson2[0] != undefined) {
-                                            
+
                                             fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appRecupPseudoUserController.php', {
                                                 method: 'post',
                                                 header: {
@@ -201,6 +205,7 @@ class Messagerie extends React.Component {
                                                 .then((responseJson) => {
                                                     pseudoUserConvers = responseJson[0]["pseudo_user"];
                                                     tab[i]["pseudo_user"] = responseJson[0]["pseudo_user"];
+                                                    tab[i]['lu_destinataire'] = "1";
                                                 })
                                         } else {
                                             fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appRecupPseudoAssocController.php', {
@@ -217,6 +222,7 @@ class Messagerie extends React.Component {
                                                     if (responseJson2[0] != undefined) {
                                                         pseudoAssocConvers = responseJson2[0]["nom_assoc"];
                                                         tab[i]["pseudo_user"] = pseudoAssocConvers;
+                                                        tab[i]['lu_destinataire'] = "1";
                                                     }
                                                 })
                                                 .catch((error) => {
@@ -227,47 +233,50 @@ class Messagerie extends React.Component {
                                     .catch((error) => {
                                         console.error(error);
                                     });
-                            }else {
+                                tab[i]['lu_destinataire'] = "1";
+                            } else {
                                 fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appRecupPseudoAssocController.php', {
-                                                    method: 'post',
-                                                    header: {
-                                                        'Accept': 'application/json',
-                                                        'Content-type': 'application/json'
-                                                    },
-                                                    body: '{"idConv": "' + tab[i]['id_convers'] + '", "idAssocCo" : ' + (this.state.idAssocUser === "null" ? 3000000 : this.state.idAssocUser) + '}'
-                                                })
-                                                    .then((response) => response.json())
-                                                    .then((responseJson2) => {
-                                                        //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
-                                                        if (responseJson2[0] != undefined) {
-                                                            pseudoAssocConvers = responseJson2[0]["nom_assoc"];
-                                                            tab[i]["pseudo_user"] = pseudoAssocConvers;
-                                                        }
-                                                    })
-                                                    .catch((error) => {
-                                                        console.error(error);
-                                                    });
+                                    method: 'post',
+                                    header: {
+                                        'Accept': 'application/json',
+                                        'Content-type': 'application/json'
+                                    },
+                                    body: '{"idConv": "' + tab[i]['id_convers'] + '", "idAssocCo" : ' + (this.state.idAssocUser === "null" ? 3000000 : this.state.idAssocUser) + '}'
+                                })
+                                    .then((response) => response.json())
+                                    .then((responseJson2) => {
+                                        //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
+                                        if (responseJson2[0] != undefined) {
+                                            pseudoAssocConvers = responseJson2[0]["nom_assoc"];
+                                            tab[i]["pseudo_user"] = pseudoAssocConvers;
+                                        }
+                                    })
+                                    .catch((error) => {
+                                        console.error(error);
+                                    });
+
                             }
                         } else {
                             fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appRecupPseudoAssocController.php', {
-                                                method: 'post',
-                                                header: {
-                                                    'Accept': 'application/json',
-                                                    'Content-type': 'application/json'
-                                                },
-                                                body: '{"idConv": "' + tab[i]['id_convers'] + '", "idAssocCo" : ' + (this.state.idAssocUser === "null" ? 3000000 : this.state.idAssocUser) + '}'
-                                            })
-                                                .then((response) => response.json())
-                                                .then((responseJson2) => {
-                                                    //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
-                                                    if (responseJson2[0] != undefined) {
-                                                        pseudoAssocConvers = responseJson2[0]["nom_assoc"];
-                                                        tab[i]["pseudo_user"] = pseudoAssocConvers;
-                                                    }
-                                                })
-                                                .catch((error) => {
-                                                    console.error(error);
-                                                });
+                                method: 'post',
+                                header: {
+                                    'Accept': 'application/json',
+                                    'Content-type': 'application/json'
+                                },
+                                body: '{"idConv": "' + tab[i]['id_convers'] + '", "idAssocCo" : ' + (this.state.idAssocUser === "null" ? 3000000 : this.state.idAssocUser) + '}'
+                            })
+                                .then((response) => response.json())
+                                .then((responseJson2) => {
+                                    //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
+                                    if (responseJson2[0] != undefined) {
+                                        pseudoAssocConvers = responseJson2[0]["nom_assoc"];
+                                        tab[i]["pseudo_user"] = pseudoAssocConvers;
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error(error);
+                                });
+
                         }
                     });
             }
@@ -308,8 +317,7 @@ class Messagerie extends React.Component {
                                                 })
                                             }}>
                                             <View style={
-                                                '"' + item.id_envoyeur + '"' === tis.state.idUser ? styles.caseMessage :
-                                                    item.lu_destinataire === "1" ? styles.caseMessage : styles.caseMessage2
+                                                item.lu_destinataire === "1" ? styles.caseMessage : styles.caseMessage2
                                             }>
                                                 <View style={styles.zoneNomContact}>
                                                     <Text style={styles.nomContact}>{item.nom_assoc}</Text>
@@ -348,8 +356,7 @@ class Messagerie extends React.Component {
                                                 })
                                             }}>
                                             <View style={
-                                                '"' + item.id_envoyeur + '"' === tis.state.idUser ? styles.caseMessage :
-                                                    item.lu_destinataire === "1" ? styles.caseMessage : styles.caseMessage2
+                                                item.lu_destinataire === "1" ? styles.caseMessage : styles.caseMessage2
                                             }>
                                                 <View style={styles.zoneNomContact}>
                                                     <Text style={styles.nomContact}>{item.pseudo_user}</Text>
