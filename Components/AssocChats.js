@@ -1,38 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight, FlatList, ScrollView, Image, ImageBackground } from 'react-native';
-
-const ASSOC = [
-    {
-        id: '1',
-        nom: 'Inni',
-        placesQ: '15',
-        placesEO: '4',
-        adresse: 'Charleroi',
-        description: "blablablablablablablablabla",
-        typeAnimal: 'Chats',
-        logo: 'http://localhost:8878/TFE-RemyVase/TFE-Ephec-2019-2020/flash/img/img_assoc/chatAdopte7100462.jpeg'
-    },
-    {
-        id: '2',
-        nom: 'Cat à Cat',
-        placesQ: '2',
-        placesEO: '29',
-        adresse: "La Louvière",
-        description: "blublublublublublublublublublu",
-        typeAnimal: 'Chats',
-        logo: 'http://localhost:8878/TFE-RemyVase/TFE-Ephec-2019-2020/flash/img/img_assoc/chatAdopte7100462.jpeg'
-    },
-    {
-        id: '3',
-        nom: 'Chabidou',
-        placesQ: '4',
-        placesEO: '4',
-        adresse: 'Pont-à-Celles',
-        description: 'bliblibliblibliblibliblibliblibli',
-        typeAnimal: 'Chiens',
-        logo: 'http://localhost:8878/TFE-RemyVase/TFE-Ephec-2019-2020/flash/img/img_assoc/chatAdopte7100462.jpeg'
-    }
-]
+import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight, FlatList, ScrollView, Image, ImageBackground,SafeAreaView } from 'react-native';
 
 class AssocChats extends React.Component {
     constructor(props) {
@@ -47,7 +14,7 @@ class AssocChats extends React.Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/listeAssociationsChatsController.php', {
+        fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appListeAssociationsChatsController.php', {
             method: 'post',
             header: {
                 'Accept': 'application/json',
@@ -68,7 +35,7 @@ class AssocChats extends React.Component {
     render() {
 
         return (
-            <View style={{flex: 1}}>
+            <SafeAreaView style={{flex: 1}}>
                 <ImageBackground
                     source={require('../img/backImage.jpg')}
                     style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
@@ -116,7 +83,7 @@ class AssocChats extends React.Component {
                             </View>}
                     />
                 </ScrollView>
-            </View>
+            </SafeAreaView>
         )
     }
 }

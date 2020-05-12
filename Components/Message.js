@@ -1,5 +1,5 @@
 import React, { Component, useState } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView, FlatList, TextInput, Image, AsyncStorage } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, FlatList, TextInput, Image, AsyncStorage, SafeAreaView } from "react-native";
 
 class Message extends React.Component {
     constructor() {
@@ -16,7 +16,7 @@ class Message extends React.Component {
 
     componentDidMount() {
         this._loadInitialState().done();
-        fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/listeMessageController.php', {
+        fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appListeMessageController.php', {
             method: 'post',
             header: {
                 'Accept': 'application/json',
@@ -56,7 +56,7 @@ class Message extends React.Component {
     }
 
     envoieMessage() {
-        fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/envoieMessageMessagerieController.php', {
+        fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appEnvoieMessageMessagerieController.php', {
             method: 'post',
             header: {
                 'Accept': 'application/json',
@@ -75,7 +75,7 @@ class Message extends React.Component {
     }
 
     messageLu() {
-        fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/messageLuController.php', {
+        fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appMessageLuController.php', {
             method: 'post',
             header: {
                 'Accept': 'application/json',
@@ -147,7 +147,7 @@ class Message extends React.Component {
         }
 
         return (
-            <View style={{ flex: 1 }}>
+            <SafeAreaView style={{ flex: 1 }}>
                 <ScrollView style={styles.scroll}
                     ref={ref => { this.scrollView = ref }}
                     onContentSizeChange={() => this.scrollView.scrollToEnd({ animated: true })}>
@@ -181,7 +181,7 @@ class Message extends React.Component {
 
                     </TouchableOpacity>
                 </View>
-            </View >
+            </SafeAreaView >
 
 
 

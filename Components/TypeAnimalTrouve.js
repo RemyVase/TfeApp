@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity,SafeAreaView } from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -9,7 +9,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 class TypeAnimalTrouve extends React.Component {
     render() {
         return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <View style={styles.submitContainer}>
                     <TouchableOpacity
                         onPress={() => navigation.navigate('AssocChats')}>
@@ -22,7 +22,7 @@ class TypeAnimalTrouve extends React.Component {
                         <Text style={styles.submitButton}>Chien</Text>
                     </TouchableOpacity>
                 </View>
-            </View>
+            </SafeAreaView>
         )
     }
 }

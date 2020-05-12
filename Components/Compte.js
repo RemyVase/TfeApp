@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, AsyncStorage, ImageBackground } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, AsyncStorage, ImageBackground,SafeAreaView } from "react-native";
 import { NavigationEvents } from "react-navigation";
 
 class Compte extends React.Component {
@@ -50,7 +50,7 @@ class Compte extends React.Component {
         function CheckSiCo() {
             if (testLog != null) {
                 return (
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                         <ImageBackground
                             source={require('../img/backImage.jpg')}
                             style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
@@ -62,11 +62,11 @@ class Compte extends React.Component {
                                 <Text style={styles.submitButton}>Déconnexion</Text>
                             </TouchableOpacity>
                         </View>
-                    </View >
+                    </SafeAreaView >
                 )
             } else {
                 return (
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                         <ImageBackground
                             source={require('../img/backImage.jpg')}
                             style={styles.imgBack}
@@ -85,7 +85,7 @@ class Compte extends React.Component {
                                 <Text style={styles.submitButton}>Connexion</Text>
                             </TouchableOpacity>
                         </View>
-                    </View>
+                    </SafeAreaView>
                 )
             }
         }

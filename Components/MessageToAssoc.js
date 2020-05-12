@@ -1,5 +1,5 @@
 import React, { Component, useState } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView, FlatList, TextInput, Image, AsyncStorage } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, FlatList, TextInput, Image, AsyncStorage,SafeAreaView } from "react-native";
 
 class MessageToAssoc extends React.Component {
     constructor() {
@@ -35,7 +35,7 @@ class MessageToAssoc extends React.Component {
         }
         else {
 
-            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/envoiMessageUserToAssocController.php', {
+            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appEnvoiMessageUserToAssocController.php', {
                 method: 'post',
                 header: {
                     'Accept': 'application/json',
@@ -86,7 +86,7 @@ class MessageToAssoc extends React.Component {
         }
         return (
 
-            <View style={styles.zoneBouton}>
+            <SafeAreaView style={styles.zoneBouton}>
                 <ScrollView style={styles.zoneMessageInput}>
                     <TextInput
                         style={{ flex: 1, width: 270 }}
@@ -97,7 +97,7 @@ class MessageToAssoc extends React.Component {
                     />
                 </ScrollView>
                 <CheckSiCo />
-            </View>
+            </SafeAreaView>
             
 
         )

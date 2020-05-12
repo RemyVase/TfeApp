@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight, FlatList, ScrollView, Image, AsyncStorage,ImageBackground } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight, FlatList, ScrollView, Image, AsyncStorage,ImageBackground,SafeAreaView } from 'react-native';
 
 class Association extends React.Component {
 
@@ -15,7 +15,7 @@ class Association extends React.Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/listeAssociationsController.php', {
+        fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appListeAssociationsController.php', {
             method: 'post',
             header: {
                 'Accept': 'application/json',
@@ -24,7 +24,7 @@ class Association extends React.Component {
         })
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log(responseJson);
+                //console.log(responseJson);
                 this.setState({ listeAssoc: responseJson });
             })
             .catch((error) => {
@@ -36,7 +36,7 @@ class Association extends React.Component {
     render() {
 
         return (
-            <View style={{flex: 1}}>
+            <SafeAreaView style={{flex: 1}}>
                 <ImageBackground
                     source={require('../img/backImage.jpg')}
                     style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
@@ -84,7 +84,7 @@ class Association extends React.Component {
                             </View>}
                     />
                 </ScrollView>
-            </View>
+            </SafeAreaView>
         )
     }
 }

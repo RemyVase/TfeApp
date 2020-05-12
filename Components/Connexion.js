@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, AsyncStorage, ImageBackground } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, AsyncStorage, ImageBackground, SafeAreaView } from "react-native";
 import { NavigationEvents } from "react-navigation";
 
 
@@ -29,7 +29,7 @@ class Connexion extends React.Component {
         }
         else {
 
-            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/connexionController.php', {
+            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appConnexionController.php', {
                 method: 'post',
                 header: {
                     'Accept': 'application/json',
@@ -67,7 +67,7 @@ class Connexion extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <SafeAreaView style={styles.container}>
                 <ImageBackground
                     source={require('../img/backImage.jpg')}
                     style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
@@ -102,7 +102,7 @@ class Connexion extends React.Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </View>
+            </SafeAreaView>
 
         )
     }
@@ -126,7 +126,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#6D071A",
         borderRadius: 25,
         marginVertical: 10,
-        top : -120
+        top : -120,
+        position: 'relative',
     },
     container2: {
         backgroundColor: "white",
