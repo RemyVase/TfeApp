@@ -1,5 +1,5 @@
 import React, { Component, useState } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView, FlatList, TextInput, Image, AsyncStorage,SafeAreaView } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, FlatList, TextInput, Image, AsyncStorage, SafeAreaView, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard,ImageBackground } from "react-native";
 
 class MessageToAssoc extends React.Component {
     constructor() {
@@ -35,7 +35,7 @@ class MessageToAssoc extends React.Component {
         }
         else {
 
-            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appEnvoiMessageUserToAssocController.php', {
+            fetch('https://www.sapandfriends.be/flash/controller/appEnvoiMessageUserToAssocController.php', {
                 method: 'post',
                 header: {
                     'Accept': 'application/json',
@@ -62,7 +62,7 @@ class MessageToAssoc extends React.Component {
         function CheckSiCo() {
             if (testLog != null) {
                 return (
-                    <View style={{ flex: 1, justifyContent: 'flex-start' }}>
+                    <View style={{ flex: 1, alignItems: 'center',}}>
                         <View style={styles.submitContainer}>
                             <TouchableOpacity
                                 onPress={() => tis.sendMessage()}>
@@ -73,7 +73,7 @@ class MessageToAssoc extends React.Component {
                 )
             } else {
                 return (
-                    <View style={{ flex: 1, justifyContent: 'flex-start' }}>
+                    <View style={{ flex: 1,alignItems: 'center',}}>
                         <View style={styles.submitContainer}>
                             <TouchableOpacity
                                 onPress={() => alert("Vous devez être connecté pour pouvoir contacter une association.")}>
@@ -86,7 +86,15 @@ class MessageToAssoc extends React.Component {
         }
         return (
 
-            <SafeAreaView style={styles.zoneBouton}>
+            <KeyboardAvoidingView style={{ flex: 1 }}
+            behavior={Platform.OS == "ios" ? "padding" : 1000}
+            keyboardVerticalOffset={64}
+        >
+            <ImageBackground
+                source={require('../img/backImage.jpg')}
+                style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
+            >
+            </ImageBackground>
                 <ScrollView style={styles.zoneMessageInput}>
                     <TextInput
                         style={{ flex: 1, width: 270 }}
@@ -97,7 +105,7 @@ class MessageToAssoc extends React.Component {
                     />
                 </ScrollView>
                 <CheckSiCo />
-            </SafeAreaView>
+            </KeyboardAvoidingView>
             
 
         )
@@ -110,15 +118,18 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         paddingVertical: 13,
         textAlign: 'center',
-        color: '#FFFFFF'
+        color: '#FFFFFF',
     },
     submitContainer: {
         backgroundColor: "#6D071A",
         borderRadius: 25,
         marginVertical: 10,
+        position: 'relative',
+        width: 100,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     zoneBouton: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -129,6 +140,7 @@ const styles = StyleSheet.create({
         marginTop: 150,
         backgroundColor: 'white',
         borderRadius: 15,
+        opacity: 0.9
     },
     messageAlert: {
         fontSize: 30,

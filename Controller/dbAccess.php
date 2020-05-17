@@ -81,6 +81,9 @@ class dbAccess
             case 'messageRecupPseudoUser':
             case 'messageCheckUser':
             case 'appRecupNomAssoc':
+            case 'ajoutChefAssoc':
+            case 'recupAllMembreAssocSansChef':
+            case 'recupAllMembrePasDansAssoc':
                 array_push($params, '?');
 
                 try {
@@ -122,6 +125,7 @@ class dbAccess
             case 'messageCheckSiFraudeAssoc':
             case 'messageCheckSiFraudeAssocConvers':
             case 'messagePseudoConvAssoc':
+            case 'transmettreDroitAssoc':
                 array_push($params, '?', '?');
 
                 try {

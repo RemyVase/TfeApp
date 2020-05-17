@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight, FlatList, ScrollView, Image, AsyncStorage, ImageBackground, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight, FlatList, ScrollView, Image, AsyncStorage, ImageBackground, SafeAreaView, Icon, ActivityIndicator } from 'react-native';
 import Message from '../Components/Message';
 import { format } from "date-fns";
 
@@ -19,17 +19,8 @@ class Messagerie extends React.Component {
             pseudoUserConvers: "",
             pseudoAssocConvers: "",
             listConversCorrect: [],
+            load: 'true'
         }
-    }
-
-    componentDidMount() {
-        const checkSiRetourSurCetEcran = this.props.navigation.addListener('focus', e => {
-            this._loadInitialState().done();
-            //let tab = this.recupNomOuAssoc();
-            this.setState({ listConversCorrect: this.recupNomOuAssoc() });
-
-        });
-
     }
 
     _loadInitialState = async () => {
@@ -47,7 +38,7 @@ class Messagerie extends React.Component {
         var userId = await AsyncStorage.getItem('UserId');
         var userIdAssoc = await AsyncStorage.getItem('UserIdAssoc');
         if (userIdAssoc === "null") {
-            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appListeConversationUserController.php', {
+            fetch('https://www.sapandfriends.be/flash/controller/appListeConversationUserController.php', {
                 method: 'post',
                 header: {
                     'Accept': 'application/json',
@@ -63,7 +54,7 @@ class Messagerie extends React.Component {
                     console.error(error);
                 });
         } else {
-            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appListeConversationUserAssocController.php', {
+            fetch('https://www.sapandfriends.be/flash/controller/appListeConversationUserAssocController.php', {
                 method: 'post',
                 header: {
                     'Accept': 'application/json',
@@ -91,6 +82,7 @@ class Messagerie extends React.Component {
         return belleDate;
     }
 
+
     //Fonction permettant de savoir si l'utilisateur est le dernier envoyeur afin d'afficher un bon nom de conversation
     recupNomOuAssoc() {
         let tab = this.state.listConvers;
@@ -100,7 +92,7 @@ class Messagerie extends React.Component {
             //Si l'utilisateur connecté est l'envoyeur du dernier message j'essaie de récupérer le pseudo de l'utilisateur à qui il parle ou celui de l'association à qui il parle
             if (pseudoEnvoyeur === this.state.pseudoUser) {
 
-                fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appRecupPseudoUserController.php', {
+                fetch('https://www.sapandfriends.be/flash/controller/appRecupPseudoUserController.php', {
                     method: 'post',
                     header: {
                         'Accept': 'application/json',
@@ -113,7 +105,7 @@ class Messagerie extends React.Component {
                         //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
                         if (responseJson[0] === undefined) {
 
-                            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appRecupPseudoAssocController.php', {
+                            fetch('https://www.sapandfriends.be/flash/controller/appRecupPseudoAssocController.php', {
                                 method: 'post',
                                 header: {
                                     'Accept': 'application/json',
@@ -135,7 +127,7 @@ class Messagerie extends React.Component {
                                 });
 
                         } else if ('"' + responseJson[0]['pseudo_user'] + '"' === this.state.pseudoUser) {
-                            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appRecupPseudoAssocController.php', {
+                            fetch('https://www.sapandfriends.be/flash/controller/appRecupPseudoAssocController.php', {
                                 method: 'post',
                                 header: {
                                     'Accept': 'application/json',
@@ -169,7 +161,7 @@ class Messagerie extends React.Component {
                 //Je remplace le pseudo envoyeur par le bon pseudo pour bien afficher
                 //On ne peux modifier directement l'array du state donc je créé un nouveau tableau sur base de celui du state et je le modifier avant de setstate
             } else {
-                fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appCheckUserIntoAssocController.php', {
+                fetch('https://www.sapandfriends.be/flash/controller/appCheckUserIntoAssocController.php', {
                     method: 'post',
                     header: {
                         'Accept': 'application/json',
@@ -181,7 +173,7 @@ class Messagerie extends React.Component {
                     .then((responseJson3) => {
                         if (responseJson3[0][0] != null) {
                             if ('"' + responseJson3[0]['id_assoc'] + '"' === this.state.idAssocUser) {
-                                fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appCheckUserMessageController.php', {
+                                fetch('https://www.sapandfriends.be/flash/controller/appCheckUserMessageController.php', {
                                     method: 'post',
                                     header: {
                                         'Accept': 'application/json',
@@ -193,7 +185,7 @@ class Messagerie extends React.Component {
                                     .then((responseJson2) => {
                                         if (responseJson2[0] != undefined) {
 
-                                            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appRecupPseudoUserController.php', {
+                                            fetch('https://www.sapandfriends.be/flash/controller/appRecupPseudoUserController.php', {
                                                 method: 'post',
                                                 header: {
                                                     'Accept': 'application/json',
@@ -208,7 +200,7 @@ class Messagerie extends React.Component {
                                                     tab[i]['lu_destinataire'] = "1";
                                                 })
                                         } else {
-                                            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appRecupPseudoAssocController.php', {
+                                            fetch('https://www.sapandfriends.be/flash/controller/appRecupPseudoAssocController.php', {
                                                 method: 'post',
                                                 header: {
                                                     'Accept': 'application/json',
@@ -235,7 +227,7 @@ class Messagerie extends React.Component {
                                     });
                                 tab[i]['lu_destinataire'] = "1";
                             } else {
-                                fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appRecupPseudoAssocController.php', {
+                                fetch('https://www.sapandfriends.be/flash/controller/appRecupPseudoAssocController.php', {
                                     method: 'post',
                                     header: {
                                         'Accept': 'application/json',
@@ -257,7 +249,7 @@ class Messagerie extends React.Component {
 
                             }
                         } else {
-                            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appRecupPseudoAssocController.php', {
+                            fetch('https://www.sapandfriends.be/flash/controller/appRecupPseudoAssocController.php', {
                                 method: 'post',
                                 header: {
                                     'Accept': 'application/json',
@@ -283,7 +275,16 @@ class Messagerie extends React.Component {
             let date = this.getParsedDate(tab[i]["date_message"]);
             tab[i]['date_message'] = date;
         }
+
         return tab;
+    }
+
+    UNSAFE_componentWillMount() {
+        const checkSiRetourSurCetEcran = this.props.navigation.addListener('focus', e => {
+            this._loadInitialState().done();
+            setTimeout(() => this.setState({ listConversCorrect: this.recupNomOuAssoc() }), 500);
+            setTimeout(() => { this.setState({ load: 'false' }) }, 501);
+        });
     }
 
     render() {
@@ -386,11 +387,18 @@ class Messagerie extends React.Component {
                 )
             }
         }
+        if (this.state.load === "true") {
+            return (
+                <ActivityIndicator size="large" color="#6D071A" />
+            )
+        }
+        else {
+            return (
+                <CheckSiCo />
 
-        return (
-            <CheckSiCo />
+            )
+        }
 
-        )
     }
 }
 

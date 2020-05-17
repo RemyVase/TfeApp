@@ -1,5 +1,6 @@
 import React, { Component, useState } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView, FlatList, TextInput, Image, AsyncStorage, SafeAreaView } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, FlatList, TextInput, Image, AsyncStorage, SafeAreaView, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Icon, Button } from "react-native";
+import { NavigationContainer } from '@react-navigation/native';
 
 class Message extends React.Component {
     constructor() {
@@ -13,25 +14,35 @@ class Message extends React.Component {
             message: "",
         }
     }
+    
 
     componentDidMount() {
-        this._loadInitialState().done();
-        fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appListeMessageController.php', {
-            method: 'post',
-            header: {
-                'Accept': 'application/json',
-                'Content-type': 'application/json'
-            },
-            body: '{"idConv": ' + this.props.route.params.idConv + '}'
-        })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                this.setState({ listMessage: responseJson });
+        var timer = setInterval(() => {
+            this._loadInitialState().done();
+            fetch('https://www.sapandfriends.be/flash/controller/appListeMessageController.php', {
+                method: 'post',
+                header: {
+                    'Accept': 'application/json',
+                    'Content-type': 'application/json'
+                },
+                body: '{"idConv": ' + this.props.route.params.idConv + '}'
             })
-            .catch((error) => {
-                console.error(error);
-            });
-
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    
+                    let tab = responseJson;
+                    let date = "";
+                    for (let i = 0; i < tab.length; i++) {
+                        date = this.getParsedDate(tab[i]['date_message']);
+                        tab[i]['date_message'] = date;
+                    }
+                    setTimeout(() => this.setState({ listMessage: tab }), 1);
+                    this.messageLu();
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+          }, 5000);
     }
 
     _loadInitialState = async () => {
@@ -44,19 +55,10 @@ class Message extends React.Component {
         this.setState({ mailUser: value2 });
         this.setState({ pseudoUser: value3 });
         this.setState({ idAssocUser: value4 });
-
-        let tab = this.state.listMessage;
-        let date = "";
-        for (let i = 0; i < tab.length; i++) {
-            date = this.getParsedDate(tab[i]['date_message']);
-            tab[i]['date_message'] = date;
-        }
-        this.setState({ listMessage: tab });
-        this.messageLu();
     }
 
     envoieMessage() {
-        fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appEnvoieMessageMessagerieController.php', {
+        fetch('https://www.sapandfriends.be/flash/controller/appEnvoieMessageMessagerieController.php', {
             method: 'post',
             header: {
                 'Accept': 'application/json',
@@ -75,7 +77,7 @@ class Message extends React.Component {
     }
 
     messageLu() {
-        fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appMessageLuController.php', {
+        fetch('https://www.sapandfriends.be/flash/controller/appMessageLuController.php', {
             method: 'post',
             header: {
                 'Accept': 'application/json',
@@ -147,18 +149,23 @@ class Message extends React.Component {
         }
 
         return (
-            <SafeAreaView style={{ flex: 1 }}>
-                <ScrollView style={styles.scroll}
-                    ref={ref => { this.scrollView = ref }}
-                    onContentSizeChange={() => this.scrollView.scrollToEnd({ animated: true })}>
-                    <FlatList
-                        data={messages}
-                        keyExtractor={(item) => item.id_message}
-                        renderItem={({ item }) =>
-                            <TriMsg envoyeur={item.id_envoyeur} date={item.date_message} nom={item.pseudo_user} msg={item.contenu_message} />
-                        }
-                    />
-                </ScrollView>
+            <KeyboardAvoidingView style={{ flex: 1 }}
+                behavior={Platform.OS == "ios" ? "padding" : 1000}
+                keyboardVerticalOffset={64}
+            >
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <ScrollView
+                        ref={ref => { this.scrollView = ref }}
+                        onContentSizeChange={() => this.scrollView.scrollToEnd({ animated: true })}>
+                        <FlatList
+                            data={messages}
+                            keyExtractor={(item) => item.id_message}
+                            renderItem={({ item }) =>
+                                <TriMsg envoyeur={item.id_envoyeur} date={item.date_message} nom={item.pseudo_user} msg={item.contenu_message} />
+                            }
+                        />
+                    </ScrollView>
+                </TouchableWithoutFeedback>
                 <View style={styles.zoneNewMessage}>
                     <ScrollView style={styles.inputText}>
                         <TextInput
@@ -181,25 +188,19 @@ class Message extends React.Component {
 
                     </TouchableOpacity>
                 </View>
-            </SafeAreaView >
-
-
-
+            </KeyboardAvoidingView >
         )
     }
 }
 
 const styles = StyleSheet.create({
-    scroll: {
-        flex: 1,
-    },
     messageRecu: {
         backgroundColor: 'white',
         borderRadius: 15,
         alignItems: 'flex-start',
         marginTop: 15,
         width: 250,
-        flex: 1,
+
         padding: 6,
         marginLeft: 5,
         shadowColor: "#000",
@@ -215,7 +216,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#FAA697',
         borderRadius: 15,
         marginTop: 15,
-        flex: 1,
         width: 250,
         padding: 6,
         marginRight: 5,
@@ -226,7 +226,6 @@ const styles = StyleSheet.create({
         borderWidth: 0.3
     },
     zoneTextMessage: {
-        flex: 1,
         marginTop: 5,
         marginLeft: 8,
         marginRight: 8,
@@ -257,16 +256,14 @@ const styles = StyleSheet.create({
     },
     zoneNewMessage: {
         backgroundColor: 'white',
-        flex: 0.1,
         borderTopWidth: 1,
         flexDirection: 'row',
     },
     inputText: {
-        flex: 0.7,
+        height: 70,
         width: 100,
     },
     envoiButton: {
-        flex: 0.3,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',

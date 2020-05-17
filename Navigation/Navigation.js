@@ -22,6 +22,7 @@ const AnimalSauveStack = createStackNavigator();
 const MessagerieStack = createStackNavigator();
 const AssociationStack = createStackNavigator();
 
+
 function TypeAnimalTrouveScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -74,7 +75,7 @@ function CompteStackScreen() {
   );
 }
 
-
+//, headerLeft: () => (<Button onPress={() => alert("C'est chauuuud") title="Update count" />))  
 function AnimalSauveStackScreen() {
   return (
     <AnimalSauveStack.Navigator>
@@ -90,8 +91,8 @@ function AnimalSauveStackScreen() {
 function MessagerieStackScreen() {
   return (
     <MessagerieStack.Navigator>
-      <MessagerieStack.Screen name="Messagerie" component={Messagerie} options={{ title: 'Messagerie', headerTintColor: 'white', headerStyle: { backgroundColor: '#6D071A' } }} />
-      <MessagerieStack.Screen name="Message" component={Message} options={{ title: 'Message', headerTintColor: 'white', headerStyle: { backgroundColor: '#6D071A' } }} />
+      <MessagerieStack.Screen name="Messagerie" component={Messagerie} options={{ title: 'Messagerie', headerTintColor: 'white', headerStyle: { backgroundColor: '#6D071A' }}} />
+      <MessagerieStack.Screen name="Message" component={Message} options={{ title: 'Message', headerTintColor: 'white', headerStyle: { backgroundColor: '#6D071A' }/*, headerLeft: () => (<Button onPress={() => componentWillUnmount()} title="Back" color="#fff"/>) */}} />
     </MessagerieStack.Navigator>
   );
 }

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, AsyncStorage, ImageBackground, SafeAreaView } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, FlatList, TextInput, Image, AsyncStorage, SafeAreaView, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard,ImageBackground } from "react-native";
 import { NavigationEvents } from "react-navigation";
 
 
@@ -29,7 +29,7 @@ class Connexion extends React.Component {
         }
         else {
 
-            fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appConnexionController.php', {
+            fetch('https://www.sapandfriends.be/flash/controller/appConnexionController.php', {
                 method: 'post',
                 header: {
                     'Accept': 'application/json',
@@ -67,7 +67,10 @@ class Connexion extends React.Component {
 
     render() {
         return (
-            <SafeAreaView style={styles.container}>
+            <KeyboardAvoidingView style={{ flex: 1 }}
+                behavior={Platform.OS == "ios" ? "padding" : 1000}
+                keyboardVerticalOffset={64}
+            >
                 <ImageBackground
                     source={require('../img/backImage.jpg')}
                     style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
@@ -93,8 +96,7 @@ class Connexion extends React.Component {
                         >
                         </TextInput>
                     </View>
-                </View>
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+
                     <View style={styles.submitContainer}>
                         <TouchableOpacity
                             onPress={this.connexion}>
@@ -102,31 +104,26 @@ class Connexion extends React.Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </SafeAreaView>
+            </KeyboardAvoidingView >
 
         )
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignContent: 'center',
-        justifyContent: 'center'
-    },
+
     submitButton: {
         width: 100,
         borderRadius: 25,
         paddingVertical: 13,
         textAlign: 'center',
         color: '#FFFFFF',
-        
+
     },
     submitContainer: {
         backgroundColor: "#6D071A",
         borderRadius: 25,
         marginVertical: 10,
-        top : -120,
         position: 'relative',
     },
     container2: {
@@ -138,8 +135,7 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         width: 320,
         opacity: 0.9,
-        top: 120,
-        marginTop : 10
+        marginTop: 10
     },
     label: {
         width: 110,

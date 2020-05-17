@@ -16,7 +16,7 @@ class Association extends React.Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8878/TFE-APP/TfeApp/Controller/appListeAssociationsController.php', {
+        fetch('https://www.sapandfriends.be/flash/controller/appListeAssociationsController.php', {
             method: 'post',
             header: {
                 'Accept': 'application/json',
@@ -31,9 +31,7 @@ class Association extends React.Component {
             })
             .catch((error) => {
                 console.error(error);
-            });
-        
-        
+            });  
     }
 
     changeImage(){
