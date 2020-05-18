@@ -2,7 +2,7 @@ import React, { Component, useState } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView, FlatList, TextInput, Image, AsyncStorage, SafeAreaView, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Icon, Button, ActivityIndicator } from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
 
-var timer = null;
+var timer;
 class Message extends React.Component {
     constructor() {
         super();
@@ -24,6 +24,7 @@ class Message extends React.Component {
     componentDidMount() {
             timer = setInterval(() => {
             this._loadInitialState().done();
+            this.messageLu();
             fetch('https://www.sapandfriends.be/flash/controller/appListeMessageController.php', {
                 method: 'post',
                 header: {
@@ -42,12 +43,13 @@ class Message extends React.Component {
                         tab[i]['date_message'] = date;
                     }
                     setTimeout(() => this.setState({ listMessage: tab }), 1);
-                    this.messageLu();
+                    
                 })
                 .catch((error) => {
                     console.error(error);
                 });
         }, 5000);
+        
         setTimeout(() => { this.setState({ load: 'false' }) }, 5001);
     }
 

@@ -27,8 +27,8 @@ class Messagerie extends React.Component {
     _onRefresh = () => {
         this.setState({ load: "true" });
         this._loadInitialState().done();
-        setTimeout(() => this.setState({ listConversCorrect: this.recupNomOuAssoc() }), 200);
-        setTimeout(() => { this.setState({ load: 'false' }) }, 400);
+        setTimeout(() => this.setState({ listConversCorrect: this.recupNomOuAssoc() }), 400);
+        setTimeout(() => { this.setState({ load: 'false' }) }, 800);
     }
 
     _loadInitialState = async () => {
@@ -96,9 +96,9 @@ class Messagerie extends React.Component {
         let tab = this.state.listConvers;
         //Boucle pour parcourir la liste de conversation
         for (let i = 0; i < tab.length; i++) {
-            var pseudoEnvoyeur = '"' + tab[i]['pseudo_user'] + '"';
+            let idEnvoyeur = '"' + tab[i]['id_envoyeur'] + '"';
             //Si l'utilisateur connecté est l'envoyeur du dernier message j'essaie de récupérer le pseudo de l'utilisateur à qui il parle ou celui de l'association à qui il parle
-            if (pseudoEnvoyeur === this.state.pseudoUser) {
+            if (idEnvoyeur === this.state.idUser) {
 
                 fetch('https://www.sapandfriends.be/flash/controller/appRecupPseudoUserController.php', {
                     method: 'post',
@@ -126,7 +126,7 @@ class Messagerie extends React.Component {
                                     //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
                                     if (responseJson2[0] != undefined) {
                                         let pseudoAssocConvers = responseJson2[0]["nom_assoc"];
-                                        tab[i]["pseudo_user"] = pseudoAssocConvers;
+                                        tab[i]["pseudo_user1"] = pseudoAssocConvers;
                                         tab[i]['lu_destinataire'] = "1";
                                     }
                                 })
@@ -148,7 +148,7 @@ class Messagerie extends React.Component {
                                     //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
                                     if (responseJson2[0] != undefined) {
                                         let pseudoAssocConvers = responseJson2[0]["nom_assoc"];
-                                        tab[i]["pseudo_user"] = pseudoAssocConvers;
+                                        tab[i]["pseudo_user1"] = pseudoAssocConvers;
                                         tab[i]['lu_destinataire'] = "1";
                                     }
                                 })
@@ -158,17 +158,18 @@ class Messagerie extends React.Component {
                         }
                         else {
                             let pseudoUserConvers = responseJson[0]["pseudo_user"];
-                            tab[i]["pseudo_user"] = pseudoUserConvers;
+                            tab[i]["pseudo_user1"] = pseudoUserConvers;
                             tab[i]['lu_destinataire'] = "1";
                         }
                     })
                     .catch((error) => {
                         console.error(error);
                     });
-                tab[i]['lu_destinataire'] = "1";
+
                 //Je remplace le pseudo envoyeur par le bon pseudo pour bien afficher
                 //On ne peux modifier directement l'array du state donc je créé un nouveau tableau sur base de celui du state et je le modifier avant de setstate
             } else {
+
                 fetch('https://www.sapandfriends.be/flash/controller/appCheckUserIntoAssocController.php', {
                     method: 'post',
                     header: {
@@ -181,6 +182,7 @@ class Messagerie extends React.Component {
                     .then((responseJson3) => {
                         if (responseJson3[0][0] != null) {
                             if ('"' + responseJson3[0]['id_assoc'] + '"' === this.state.idAssocUser) {
+
                                 fetch('https://www.sapandfriends.be/flash/controller/appCheckUserMessageController.php', {
                                     method: 'post',
                                     header: {
@@ -191,6 +193,7 @@ class Messagerie extends React.Component {
                                 })
                                     .then((response) => response.json())
                                     .then((responseJson2) => {
+
                                         if (responseJson2[0] != undefined) {
 
                                             fetch('https://www.sapandfriends.be/flash/controller/appRecupPseudoUserController.php', {
@@ -204,10 +207,11 @@ class Messagerie extends React.Component {
                                                 .then((response) => response.json())
                                                 .then((responseJson) => {
                                                     let pseudoUserConvers = responseJson[0]["pseudo_user"];
-                                                    tab[i]["pseudo_user"] = pseudoUserConvers;
+                                                    tab[i]["pseudo_user1"] = pseudoUserConvers;
                                                     tab[i]['lu_destinataire'] = "1";
                                                 })
                                         } else {
+
                                             fetch('https://www.sapandfriends.be/flash/controller/appRecupPseudoAssocController.php', {
                                                 method: 'post',
                                                 header: {
@@ -221,7 +225,7 @@ class Messagerie extends React.Component {
                                                     //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
                                                     if (responseJson2[0] != undefined) {
                                                         let pseudoAssocConvers = responseJson2[0]["nom_assoc"];
-                                                        tab[i]["pseudo_user"] = pseudoAssocConvers;
+                                                        tab[i]["pseudo_user1"] = pseudoAssocConvers;
                                                         tab[i]['lu_destinataire'] = "1";
                                                     }
                                                 })
@@ -233,7 +237,7 @@ class Messagerie extends React.Component {
                                     .catch((error) => {
                                         console.error(error);
                                     });
-                                tab[i]['lu_destinataire'] = "1";
+
                             } else {
                                 fetch('https://www.sapandfriends.be/flash/controller/appRecupPseudoAssocController.php', {
                                     method: 'post',
@@ -248,7 +252,8 @@ class Messagerie extends React.Component {
                                         //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
                                         if (responseJson2[0] != undefined) {
                                             let pseudoAssocConvers = responseJson2[0]["nom_assoc"];
-                                            tab[i]["pseudo_user"] = pseudoAssocConvers;
+                                            tab[i]["pseudo_user1"] = pseudoAssocConvers;
+
                                         }
                                     })
                                     .catch((error) => {
@@ -257,42 +262,41 @@ class Messagerie extends React.Component {
 
                             }
                         } else {
-                            fetch('https://www.sapandfriends.be/flash/controller/appRecupPseudoAssocController.php', {
+                            
+                            fetch('https://www.sapandfriends.be/flash/controller/appRecupPseudoUserController.php', {
                                 method: 'post',
                                 header: {
                                     'Accept': 'application/json',
                                     'Content-type': 'application/json'
                                 },
-                                body: '{"idConv": "' + tab[i]['id_convers'] + '", "idAssocCo" : ' + (this.state.idAssocUser === "null" ? 3000000 : this.state.idAssocUser) + '}'
+                                body: '{"idConv": "' + tab[i]['id_convers'] + '"}'
                             })
                                 .then((response) => response.json())
-                                .then((responseJson2) => {
-                                    //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
-                                    if (responseJson2[0] != undefined) {
-                                        let pseudoAssocConvers = responseJson2[0]["nom_assoc"];
-                                        tab[i]["pseudo_user"] = pseudoAssocConvers;
-                                    }
+                                .then((responseJson) => {
+                                    let pseudoUserConvers = responseJson[0]["pseudo_user"];
+                                    tab[i]["pseudo_user1"] = pseudoUserConvers;
                                 })
-                                .catch((error) => {
-                                    console.error(error);
-                                });
-
                         }
                     });
             }
             let date = this.getParsedDate(tab[i]["date_message"]);
             tab[i]['date_message'] = date;
         }
-        console.log(tab);
         return tab;
     }
 
-    UNSAFE_componentWillMount() {
+    componentDidMount() {
         const checkSiRetourSurCetEcran = this.props.navigation.addListener('focus', e => {
             this._loadInitialState().done();
-            setTimeout(() => this.setState({ listConversCorrect: this.recupNomOuAssoc() }), 200);
-            setTimeout(() => { this.setState({ load: 'false' }) }, 400);
+            setTimeout(() => this.setState({ listConversCorrect: this.recupNomOuAssoc() }), 400);
+            setTimeout(() => this.setState({ load: 'false' }), 800);
         });
+    }
+
+    UNSAFE_componentWillMount() {
+        this._loadInitialState().done();
+        setTimeout(() => this.setState({ listConversCorrect: this.recupNomOuAssoc() }), 400);
+        setTimeout(() => this.setState({ load: 'false' }), 800);
     }
 
     render() {
@@ -303,6 +307,15 @@ class Messagerie extends React.Component {
         var tis = this;
         const Entities = require('html-entities').AllHtmlEntities;
         const entities = new Entities();
+
+        function luPasLu(lu) {
+            if (lu === "0") {
+                return styles.caseMessage2;
+            }
+            else {
+                return styles.caseMessage;
+            }
+        }
 
         function CheckSiCo() {
             if (testLog != null) {
@@ -324,29 +337,31 @@ class Messagerie extends React.Component {
                                 <FlatList
                                     data={state.listConversCorrect}
                                     keyExtractor={(item) => item.id_convers.toString()}
-                                    renderItem={({ item }) =>
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                nav.navigation.navigate('Message', {
-                                                    idConv: item.id_convers
-                                                })
-                                            }}>
-                                            <View style={
-                                                item.lu_destinataire === "1" ? styles.caseMessage : styles.caseMessage2
-                                            }>
-                                                <View style={styles.zoneNomContact}>
-                                                    <Text style={styles.nomContact}>{item.nom_assoc}</Text>
-                                                </View>
-                                                <View style={styles.zoneMessage}>
-                                                    <View style={styles.zoneLastMessage}>
-                                                        <Text style={styles.lastMsg}>{entities.decode(item.contenu_message)}</Text>
+                                    renderItem={({ item }) => {
+                                        return (
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                    nav.navigation.navigate('Message', {
+                                                        idConv: item.id_convers
+                                                    })
+                                                }}>
+                                                <View style={luPasLu(item.lu_destinataire)}>
+                                                    <View style={styles.zoneNomContact}>
+                                                        <Text style={styles.nomContact}>{item.pseudo_user1}</Text>
                                                     </View>
-                                                    <View style={styles.zoneHeure}>
-                                                        <Text style={styles.dateMsg}>{item.date_message}</Text>
+                                                    <View style={styles.zoneMessage}>
+                                                        <View style={styles.zoneLastMessage}>
+                                                            <Text style={styles.lastMsg}>{entities.decode(item.contenu_message)}</Text>
+                                                        </View>
+                                                        <View style={styles.zoneHeure}>
+                                                            <Text style={styles.dateMsg}>{item.date_message}</Text>
+                                                        </View>
                                                     </View>
                                                 </View>
-                                            </View>
-                                        </TouchableOpacity>}
+                                            </TouchableOpacity>
+                                        )
+                                    }
+                                    }
                                 />
                             </ScrollView>
                         </SafeAreaView>
@@ -369,29 +384,32 @@ class Messagerie extends React.Component {
                                 <FlatList
                                     data={state.listConversCorrect}
                                     keyExtractor={(item) => item.id_convers.toString()}
-                                    renderItem={({ item }) =>
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                nav.navigation.navigate('Message', {
-                                                    idConv: item.id_convers
-                                                })
-                                            }}>
-                                            <View style={
-                                                item.lu_destinataire === "1" ? styles.caseMessage : styles.caseMessage2
-                                            }>
-                                                <View style={styles.zoneNomContact}>
-                                                    <Text style={styles.nomContact}>{item.pseudo_user}</Text>
-                                                </View>
-                                                <View style={styles.zoneMessage}>
-                                                    <View style={styles.zoneLastMessage}>
-                                                        <Text style={styles.lastMsg}>{entities.decode(item.contenu_message)}</Text>
+                                    renderItem={({ item }) => {
+                                        return (
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                    nav.navigation.navigate('Message', {
+                                                        idConv: item.id_convers
+                                                    })
+                                                }}>
+                                                <View style={luPasLu(item.lu_destinataire)}>
+                                                    <View style={styles.zoneNomContact}>
+                                                        <Text style={styles.nomContact}>{item.pseudo_user1}</Text>
                                                     </View>
-                                                    <View style={styles.zoneHeure}>
-                                                        <Text style={styles.dateMsg}>{item.date_message}</Text>
+                                                    <View style={styles.zoneMessage}>
+                                                        <View style={styles.zoneLastMessage}>
+                                                            <Text style={styles.lastMsg}>{entities.decode(item.contenu_message)}</Text>
+                                                        </View>
+                                                        <View style={styles.zoneHeure}>
+                                                            <Text style={styles.dateMsg}>{item.date_message}</Text>
+                                                        </View>
                                                     </View>
                                                 </View>
-                                            </View>
-                                        </TouchableOpacity>}
+                                            </TouchableOpacity>
+                                        )
+
+                                    }
+                                    }
                                 />
                             </ScrollView>
                         </SafeAreaView>
