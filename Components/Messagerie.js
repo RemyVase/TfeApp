@@ -454,6 +454,8 @@ const styles = StyleSheet.create({
         color: 'grey',
         marginLeft: 10,
         marginBottom: 5,
+        height: 20,
+        width: 175
     },
     zoneMessage: {
         flex: 1,

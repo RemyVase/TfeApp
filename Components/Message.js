@@ -1,5 +1,5 @@
 import React, { Component, useState } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView, FlatList, TextInput, Image, AsyncStorage, SafeAreaView, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Icon, Button } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, FlatList, TextInput, Image, AsyncStorage, SafeAreaView, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Icon, Button, ActivityIndicator } from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
 
 class Message extends React.Component {
@@ -12,9 +12,10 @@ class Message extends React.Component {
             pseudoUser: "",
             idAssocUser: "",
             message: "",
+            load: 'true'
         }
     }
-    
+
 
     componentDidMount() {
         var timer = setInterval(() => {
@@ -29,7 +30,7 @@ class Message extends React.Component {
             })
                 .then((response) => response.json())
                 .then((responseJson) => {
-                    
+
                     let tab = responseJson;
                     let date = "";
                     for (let i = 0; i < tab.length; i++) {
@@ -42,7 +43,8 @@ class Message extends React.Component {
                 .catch((error) => {
                     console.error(error);
                 });
-          }, 5000);
+        }, 5000);
+        setTimeout(() => { this.setState({ load: 'false' }) }, 5001);
     }
 
     _loadInitialState = async () => {
@@ -148,48 +150,56 @@ class Message extends React.Component {
             }
         }
 
-        return (
-            <KeyboardAvoidingView style={{ flex: 1 }}
-                behavior={Platform.OS == "ios" ? "padding" : 1000}
-                keyboardVerticalOffset={64}
-            >
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <ScrollView
-                        ref={ref => { this.scrollView = ref }}
-                        onContentSizeChange={() => this.scrollView.scrollToEnd({ animated: true })}>
-                        <FlatList
-                            data={messages}
-                            keyExtractor={(item) => item.id_message}
-                            renderItem={({ item }) =>
-                                <TriMsg envoyeur={item.id_envoyeur} date={item.date_message} nom={item.pseudo_user} msg={item.contenu_message} />
-                            }
-                        />
-                    </ScrollView>
-                </TouchableWithoutFeedback>
-                <View style={styles.zoneNewMessage}>
-                    <ScrollView style={styles.inputText}>
-                        <TextInput
-                            style={{ height: 40 }}
-                            placeholder="Ecrivez votre nouveau message ici..!"
-                            multiline={true}
-                            value={this.state.message}
-                            onChangeText={(message) => this.setState({ message: message })}
-                        />
-                    </ScrollView>
-                    <TouchableOpacity
-                        style={styles.envoiButton}
-                        onPress={() => this.envoieMessage()}>
+        if (this.state.load === "false") {
 
-                        <View style={styles.zoneButton}>
-                            <Image
-                                source={require('../assets/iconEnvoi.png')}
+            return (
+                <KeyboardAvoidingView style={{ flex: 1 }}
+                    behavior={Platform.OS == "ios" ? "padding" : 1000}
+                    keyboardVerticalOffset={64}
+                >
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                        <ScrollView
+                            ref={ref => { this.scrollView = ref }}
+                            onContentSizeChange={() => this.scrollView.scrollToEnd({ animated: true })}>
+                            <FlatList
+                                data={messages}
+                                keyExtractor={(item) => item.id_message}
+                                renderItem={({ item }) =>
+                                    <TriMsg envoyeur={item.id_envoyeur} date={item.date_message} nom={item.pseudo_user} msg={item.contenu_message} />
+                                }
                             />
-                        </View>
+                        </ScrollView>
+                    </TouchableWithoutFeedback>
+                    <View style={styles.zoneNewMessage}>
+                        <ScrollView style={styles.inputText}>
+                            <TextInput
+                                style={{ height: 40 }}
+                                placeholder="Ecrivez votre nouveau message ici..!"
+                                multiline={true}
+                                value={this.state.message}
+                                onChangeText={(message) => this.setState({ message: message })}
+                            />
+                        </ScrollView>
+                        <TouchableOpacity
+                            style={styles.envoiButton}
+                            onPress={() => this.envoieMessage()}>
 
-                    </TouchableOpacity>
-                </View>
-            </KeyboardAvoidingView >
-        )
+                            <View style={styles.zoneButton}>
+                                <Image
+                                    source={require('../assets/iconEnvoi.png')}
+                                />
+                            </View>
+
+                        </TouchableOpacity>
+                    </View>
+                </KeyboardAvoidingView >
+
+            )
+        } else {
+            return (
+                <ActivityIndicator size="large" color="#6D071A" />
+            )
+        }
     }
 }
 

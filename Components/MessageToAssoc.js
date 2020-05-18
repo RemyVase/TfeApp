@@ -140,7 +140,8 @@ const styles = StyleSheet.create({
         marginTop: 150,
         backgroundColor: 'white',
         borderRadius: 15,
-        opacity: 0.9
+        opacity: 0.9,
+        padding : 15
     },
     messageAlert: {
         fontSize: 30,
