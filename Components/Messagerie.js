@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight, FlatList, ScrollView, Image, AsyncStorage, ImageBackground, SafeAreaView, Icon, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight, FlatList, ScrollView, Image, AsyncStorage, ImageBackground, SafeAreaView, Icon, ActivityIndicator, RefreshControl } from 'react-native';
 import Message from '../Components/Message';
 import { format } from "date-fns";
 
@@ -19,8 +19,16 @@ class Messagerie extends React.Component {
             pseudoUserConvers: "",
             pseudoAssocConvers: "",
             listConversCorrect: [],
-            load: 'true'
+            load: 'true',
+            refreshing: false,
         }
+    }
+
+    _onRefresh = () => {
+        this.setState({ load: "true" });
+        this._loadInitialState().done();
+        setTimeout(() => this.setState({ listConversCorrect: this.recupNomOuAssoc() }), 200);
+        setTimeout(() => { this.setState({ load: 'false' }) }, 400);
     }
 
     _loadInitialState = async () => {
@@ -117,7 +125,7 @@ class Messagerie extends React.Component {
                                 .then((responseJson2) => {
                                     //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
                                     if (responseJson2[0] != undefined) {
-                                        pseudoAssocConvers = responseJson2[0]["nom_assoc"];
+                                        let pseudoAssocConvers = responseJson2[0]["nom_assoc"];
                                         tab[i]["pseudo_user"] = pseudoAssocConvers;
                                         tab[i]['lu_destinataire'] = "1";
                                     }
@@ -139,7 +147,7 @@ class Messagerie extends React.Component {
                                 .then((responseJson2) => {
                                     //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
                                     if (responseJson2[0] != undefined) {
-                                        pseudoAssocConvers = responseJson2[0]["nom_assoc"];
+                                        let pseudoAssocConvers = responseJson2[0]["nom_assoc"];
                                         tab[i]["pseudo_user"] = pseudoAssocConvers;
                                         tab[i]['lu_destinataire'] = "1";
                                     }
@@ -149,8 +157,8 @@ class Messagerie extends React.Component {
                                 });
                         }
                         else {
-                            pseudoUserConvers = responseJson[0]["pseudo_user"];
-                            tab[i]["pseudo_user"] = responseJson[0]["pseudo_user"];
+                            let pseudoUserConvers = responseJson[0]["pseudo_user"];
+                            tab[i]["pseudo_user"] = pseudoUserConvers;
                             tab[i]['lu_destinataire'] = "1";
                         }
                     })
@@ -195,8 +203,8 @@ class Messagerie extends React.Component {
                                             })
                                                 .then((response) => response.json())
                                                 .then((responseJson) => {
-                                                    pseudoUserConvers = responseJson[0]["pseudo_user"];
-                                                    tab[i]["pseudo_user"] = responseJson[0]["pseudo_user"];
+                                                    let pseudoUserConvers = responseJson[0]["pseudo_user"];
+                                                    tab[i]["pseudo_user"] = pseudoUserConvers;
                                                     tab[i]['lu_destinataire'] = "1";
                                                 })
                                         } else {
@@ -212,7 +220,7 @@ class Messagerie extends React.Component {
                                                 .then((responseJson2) => {
                                                     //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
                                                     if (responseJson2[0] != undefined) {
-                                                        pseudoAssocConvers = responseJson2[0]["nom_assoc"];
+                                                        let pseudoAssocConvers = responseJson2[0]["nom_assoc"];
                                                         tab[i]["pseudo_user"] = pseudoAssocConvers;
                                                         tab[i]['lu_destinataire'] = "1";
                                                     }
@@ -239,7 +247,7 @@ class Messagerie extends React.Component {
                                     .then((responseJson2) => {
                                         //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
                                         if (responseJson2[0] != undefined) {
-                                            pseudoAssocConvers = responseJson2[0]["nom_assoc"];
+                                            let pseudoAssocConvers = responseJson2[0]["nom_assoc"];
                                             tab[i]["pseudo_user"] = pseudoAssocConvers;
                                         }
                                     })
@@ -261,7 +269,7 @@ class Messagerie extends React.Component {
                                 .then((responseJson2) => {
                                     //Je place le pseudo de l'utilisateur dans un state pour pouvoir le récupérer
                                     if (responseJson2[0] != undefined) {
-                                        pseudoAssocConvers = responseJson2[0]["nom_assoc"];
+                                        let pseudoAssocConvers = responseJson2[0]["nom_assoc"];
                                         tab[i]["pseudo_user"] = pseudoAssocConvers;
                                     }
                                 })
@@ -275,15 +283,15 @@ class Messagerie extends React.Component {
             let date = this.getParsedDate(tab[i]["date_message"]);
             tab[i]['date_message'] = date;
         }
-
+        console.log(tab);
         return tab;
     }
 
     UNSAFE_componentWillMount() {
         const checkSiRetourSurCetEcran = this.props.navigation.addListener('focus', e => {
             this._loadInitialState().done();
-            setTimeout(() => this.setState({ listConversCorrect: this.recupNomOuAssoc() }), 500);
-            setTimeout(() => { this.setState({ load: 'false' }) }, 501);
+            setTimeout(() => this.setState({ listConversCorrect: this.recupNomOuAssoc() }), 200);
+            setTimeout(() => { this.setState({ load: 'false' }) }, 400);
         });
     }
 
@@ -306,7 +314,13 @@ class Messagerie extends React.Component {
                                 style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
                             >
                             </ImageBackground>
-                            <ScrollView style={styles.scroll}>
+                            <ScrollView style={styles.scroll}
+                                refreshControl={
+                                    <RefreshControl
+                                        load={tis.state.load}
+                                        onRefresh={tis._onRefresh}
+                                    />
+                                }>
                                 <FlatList
                                     data={state.listConversCorrect}
                                     keyExtractor={(item) => item.id_convers.toString()}
@@ -345,7 +359,13 @@ class Messagerie extends React.Component {
                                 style={{ width: '100%', height: '80%', resizeMode: 'repeat', justifyContent: 'center', alignItems: 'center', right: 20, top: 120, opacity: 0.2, position: 'absolute', }}
                             >
                             </ImageBackground>
-                            <ScrollView style={styles.scroll}>
+                            <ScrollView style={styles.scroll}
+                                refreshControl={
+                                    <RefreshControl
+                                        load={tis.state.load}
+                                        onRefresh={tis._onRefresh}
+                                    />
+                                }>
                                 <FlatList
                                     data={state.listConversCorrect}
                                     keyExtractor={(item) => item.id_convers.toString()}

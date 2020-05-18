@@ -15,6 +15,7 @@ $idAssocUserCo = $obj["idAssocUserCo"];
 $checkEnvoyeurLastMessage = $db->callProcedure('messageCheckEnvoyeurLastMessage', [$idConv]);
 $checkAssocUser = $db->callProcedure('messageCheckSiEnvoyeurDansAssoc', [$checkEnvoyeurLastMessage[0]{'id_envoyeur'}]);
 
+
 //checker si l'id user et/ou l'id assoc de la session correspond bien à ceux lier à la conversation
 if ($checkEnvoyeurLastMessage[0]{'id_envoyeur'} != $idUserCo) {
     if ($checkAssocUser[0]{'id_assoc'} != $idAssocUserCo) {
