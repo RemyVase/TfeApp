@@ -74,6 +74,7 @@ class Message extends React.Component {
         })
             .then((response) => response.json())
             .then((responseJson) => {
+                clearInterval(timer);
                 this.componentDidMount();
                 this.setState({ message: "" });
             })
