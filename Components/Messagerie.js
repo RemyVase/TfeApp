@@ -286,7 +286,9 @@ class Messagerie extends React.Component {
     }
 
     componentDidMount() {
+
         const checkSiRetourSurCetEcran = this.props.navigation.addListener('focus', e => {
+            this.setState({load: 'true'})
             this._loadInitialState().done();
             setTimeout(() => this.setState({ listConversCorrect: this.recupNomOuAssoc() }), 400);
             setTimeout(() => this.setState({ load: 'false' }), 800);

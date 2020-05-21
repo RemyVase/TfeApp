@@ -48,7 +48,7 @@ class Message extends React.Component {
                 .catch((error) => {
                     console.error(error);
                 });
-        }, 5000);
+        }, 2000);
         
         setTimeout(() => { this.setState({ load: 'false' }) }, 5001);
     }

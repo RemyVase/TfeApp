@@ -12,6 +12,7 @@ import Messagerie from '../Components/Messagerie';
 import Association from '../Components/Association';
 import AssocChats from '../Components/AssocChats';
 import AssocChiens from '../Components/AssocChiens';
+import AssocAutre from '../Components/AssocAutre';
 import Message from '../Components/Message';
 import MessageToAssoc from '../Components/MessageToAssoc';
 import Compte from '../Components/Compte';
@@ -41,6 +42,12 @@ function TypeAnimalTrouveScreen({ navigation }) {
         <TouchableOpacity
           onPress={() => navigation.navigate('AssocChiens')}>
           <Text style={styles.submitButton}>Chien</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.submitContainer}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('AssocAutre')}>
+          <Text style={styles.submitButton}>Autre</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -75,7 +82,6 @@ function CompteStackScreen() {
   );
 }
 
-//, headerLeft: () => (<Button onPress={() => alert("C'est chauuuud") title="Update count" />))  
 function AnimalSauveStackScreen() {
   return (
     <AnimalSauveStack.Navigator>
@@ -83,6 +89,7 @@ function AnimalSauveStackScreen() {
       <AnimalSauveStack.Screen name="TypeAnimalTrouveScreen" component={TypeAnimalTrouveScreen} options={{ title: 'De quel type d\'animal s\'agit t\'il ?', headerTintColor: 'white', headerStyle: { backgroundColor: '#6D071A' } }} />
       <AnimalSauveStack.Screen name="AssocChats" component={AssocChats} options={{ title: 'Associations de chats', headerTintColor: 'white', headerStyle: { backgroundColor: '#6D071A' } }} />
       <AnimalSauveStack.Screen name="AssocChiens" component={AssocChiens} options={{ title: 'Associations de chiens', headerTintColor: 'white', headerStyle: { backgroundColor: '#6D071A' } }} />
+      <AnimalSauveStack.Screen name="AssocAutre" component={AssocAutre} options={{ title: 'Associations animals', headerTintColor: 'white', headerStyle: { backgroundColor: '#6D071A' } }} />
       <AnimalSauveStack.Screen name="MessageToAssoc" component={MessageToAssoc} options={{ title: 'Message', headerTintColor: 'white', headerStyle: { backgroundColor: '#6D071A' } }} />
     </AnimalSauveStack.Navigator>
   );
