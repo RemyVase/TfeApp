@@ -52,8 +52,8 @@ class Connexion extends React.Component {
                             AsyncStorage.setItem('UserEmail', JSON.stringify(responseJson[0]["mail_user"]));
                             AsyncStorage.setItem('UserPseudo', JSON.stringify(responseJson[0]["pseudo_user"]));
                             AsyncStorage.setItem('UserIdAssoc', JSON.stringify(responseJson[0]["id_assoc"]));
+                            AsyncStorage.setItem('UserVille', JSON.stringify(responseJson[0]["ville_user"]));
                             this.componentWillUnmount();
-                            //this.props.navigation.navigate('Compte',{ onBack: onBack.bind(this) });
                         } catch (error) {
                             console.log(error);
                         }

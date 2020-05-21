@@ -13,7 +13,8 @@ class Message extends React.Component {
             pseudoUser: "",
             idAssocUser: "",
             message: "",
-            load: 'true'
+            load: 'true',
+            villeUser:"",
         }
     }
 
@@ -58,11 +59,12 @@ class Message extends React.Component {
         var value2 = await AsyncStorage.getItem('UserEmail');
         var value3 = await AsyncStorage.getItem('UserPseudo');
         var value4 = await AsyncStorage.getItem('UserIdAssoc');
-
+        var value5 = await AsyncStorage.getItem('UserVille');
         this.setState({ idUser: value });
         this.setState({ mailUser: value2 });
         this.setState({ pseudoUser: value3 });
         this.setState({ idAssocUser: value4 });
+        this.setState({ villeUser: value5});
     }
 
     envoieMessage() {

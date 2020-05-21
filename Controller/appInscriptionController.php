@@ -9,6 +9,7 @@ $obj = json_decode($json,true);
 $pseudo = htmlspecialchars($obj["pseudoUser"]);
 $email = htmlspecialchars($obj["mailUser"]);
 $password = hash("sha256",htmlspecialchars($obj["passwordUser"]));
+$ville = htmlspecialchars($obj["villeUser"]);
 
 
 $checkEmail = $db->callProcedure("checkMail", [$email]);
@@ -23,6 +24,6 @@ if (!empty($checkEmail)) {
 } else if (!empty($checkPseudo)) {
     echo json_encode("pseudoPasOk");
 } else {
-    $inscription = $db->callProcedure('ajoutUser', [$pseudo, $email, $password]);
+    $inscription = $db->callProcedure('ajoutUser', [$pseudo, $email, $password, $ville]);
     echo json_encode("ok");
 }

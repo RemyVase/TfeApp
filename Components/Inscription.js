@@ -9,6 +9,7 @@ class Inscription extends React.Component {
             email: '',
             mdp: '',
             confirmMdp: '',
+            ville: '',
         }
     }
 
@@ -17,6 +18,7 @@ class Inscription extends React.Component {
         const { email } = this.state;
         const { mdp } = this.state;
         const { confirmMdp } = this.state;
+        const {ville } = this.state;
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         if (email == "") {
             alert('Entrez votre adresse mail.');
@@ -38,6 +40,9 @@ class Inscription extends React.Component {
         else if (mdp != confirmMdp) {
             alert("Les deux mots de passes doivent être identiques.")
         }
+        else if(ville == ""){
+            alert("Entrez votre ville.");
+        }
         else {
 
             fetch('https://www.sapandfriends.be/flash/controller/appInscriptionController.php', {
@@ -50,6 +55,7 @@ class Inscription extends React.Component {
                     pseudoUser: pseudo,
                     mailUser: email,
                     passwordUser: mdp,
+                    villeUser : ville,
                 })
 
             })
@@ -100,6 +106,15 @@ class Inscription extends React.Component {
                             style={styles.inputStyle}
                             value={this.state.email}
                             onChangeText={(email) => this.setState({ email: email })}
+                        >
+                        </TextInput>
+                    </View>
+                    <View style={styles.container2}>
+                        <Text style={styles.label}>Votre ville :</Text>
+                        <TextInput
+                            style={styles.inputStyle}
+                            value={this.state.ville}
+                            onChangeText={(ville) => this.setState({ ville: ville })}
                         >
                         </TextInput>
                     </View>
