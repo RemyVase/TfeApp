@@ -43,27 +43,31 @@ class AssocAutre extends React.Component {
                 .then((responseJson) => {
                     this.setState({ listeAssoc: responseJson });
                     let tab = this.state.listeAssoc;
-                    let ville = this.state.villeUser.slice(1);
-                    let villeCorrect = ville.substring(0, ville.length - 1);
                     for (let i = 0; i < tab.length; i++) {
                         let image = tab[i]['img'].substring(2);
                         let lienImage = "https://www.sapandfriends.be/flash" + image;
                         tab[i]['img'] = lienImage;
-                        fetch('https://fr.distance24.org/route.json?stops=' + villeCorrect + '%7C' + tab[i]['adresse_assoc'], {
-                            method: 'get',
-                            header: {
-                                'Accept': 'application/json',
-                                'Content-type': 'application/json'
-                            }
-                        })
-                            .then((response) => response.json())
-                            .then((responseJson) => {
-                                //console.log(responseJson['distance'] + "km");
-                                tab[i]["distance"] = responseJson['distance'] + 'km';
+                        if (this.state.villeUser != null) {
+                            let ville = this.state.villeUser.slice(1);
+                            let villeCorrect = ville.substring(0, ville.length - 1);
+                            fetch('https://fr.distance24.org/route.json?stops=' + villeCorrect + '%7C' + tab[i]['adresse_assoc'], {
+                                method: 'get',
+                                header: {
+                                    'Accept': 'application/json',
+                                    'Content-type': 'application/json'
+                                }
                             })
-                            .catch((error) => {
-                                console.error(error);
-                            });
+                                .then((response) => response.json())
+                                .then((responseJson) => {
+                                    //console.log(responseJson['distance'] + "km");
+                                    tab[i]["distance"] = responseJson['distance'] + 'km';
+                                })
+                                .catch((error) => {
+                                    console.error(error);
+                                });
+                        }else{
+                            tab[i]["distance"] = "Besoin de connexion";
+                        }
                     }
                     setTimeout(() => this.setState({ listeAssocCorrect: tab }), 1000);
                 })

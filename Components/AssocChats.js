@@ -15,40 +15,42 @@ class AssocChats extends React.Component {
             load: 'true',
         }
     }
-    
-        _loadInitialState = async () => {
-            var value = await AsyncStorage.getItem('UserId');
-            var value2 = await AsyncStorage.getItem('UserEmail');
-            var value3 = await AsyncStorage.getItem('UserPseudo');
-            var value4 = await AsyncStorage.getItem('UserIdAssoc');
-            var value5 = await AsyncStorage.getItem('UserVille');
-            this.setState({ idUser: value });
-            this.setState({ mailUser: value2 });
-            this.setState({ pseudoUser: value3 });
-            this.setState({ idAssocUser: value4 });
-            this.setState({ villeUser: value5 });
-        }
-    
-        componentDidMount() {
-            this.setState({ load: 'true' })
-            this._loadInitialState().done();
-            fetch('https://www.sapandfriends.be/flash/controller/appListeAssociationsChatsController.php', {
-                method: 'post',
-                header: {
-                    'Accept': 'application/json',
-                    'Content-type': 'application/json'
-                }
-            })
-                .then((response) => response.json())
-                .then((responseJson) => {
-                    this.setState({ listeAssoc: responseJson });
-                    let tab = this.state.listeAssoc;
-                    let ville = this.state.villeUser.slice(1);
-                    let villeCorrect = ville.substring(0, ville.length - 1);
-                    for (let i = 0; i < tab.length; i++) {
-                        let image = tab[i]['img'].substring(2);
-                        let lienImage = "https://www.sapandfriends.be/flash" + image;
-                        tab[i]['img'] = lienImage;
+
+    _loadInitialState = async () => {
+        var value = await AsyncStorage.getItem('UserId');
+        var value2 = await AsyncStorage.getItem('UserEmail');
+        var value3 = await AsyncStorage.getItem('UserPseudo');
+        var value4 = await AsyncStorage.getItem('UserIdAssoc');
+        var value5 = await AsyncStorage.getItem('UserVille');
+        this.setState({ idUser: value });
+        this.setState({ mailUser: value2 });
+        this.setState({ pseudoUser: value3 });
+        this.setState({ idAssocUser: value4 });
+        this.setState({ villeUser: value5 });
+    }
+
+    componentDidMount() {
+        this.setState({ load: 'true' })
+        this._loadInitialState().done();
+        fetch('https://www.sapandfriends.be/flash/controller/appListeAssociationsChatsController.php', {
+            method: 'post',
+            header: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json'
+            }
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({ listeAssoc: responseJson });
+                let tab = this.state.listeAssoc;
+
+                for (let i = 0; i < tab.length; i++) {
+                    let image = tab[i]['img'].substring(2);
+                    let lienImage = "https://www.sapandfriends.be/flash" + image;
+                    tab[i]['img'] = lienImage;
+                    if (this.state.villeUser != null) {
+                        let ville = this.state.villeUser.slice(1);
+                        let villeCorrect = ville.substring(0, ville.length - 1);
                         fetch('https://fr.distance24.org/route.json?stops=' + villeCorrect + '%7C' + tab[i]['adresse_assoc'], {
                             method: 'get',
                             header: {
@@ -64,15 +66,18 @@ class AssocChats extends React.Component {
                             .catch((error) => {
                                 console.error(error);
                             });
+                    }else{
+                        tab[i]["distance"] = "Besoin de connexion";
                     }
-                    setTimeout(() => this.setState({ listeAssocCorrect: tab }), 1000);
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-            setTimeout(() => this.setState({ load: 'false' }), 1500);
-            console.log(this.state.listeAssocCorrect)
-        }
+                }
+                setTimeout(() => this.setState({ listeAssocCorrect: tab }), 1000);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+        setTimeout(() => this.setState({ load: 'false' }), 1500);
+        console.log(this.state.listeAssocCorrect)
+    }
 
 
     render() {
@@ -106,7 +111,7 @@ class AssocChats extends React.Component {
                                             <View>
                                                 <Text style={styles.stylePlace}>Quarantaine : {item.nbPlaceQuarant_assoc}</Text>
                                                 <Text style={styles.stylePlace}>Ordre : {item.nbPlaceRegle_assoc}</Text>
-                                                
+
                                             </View>
                                         </View>
                                     </View>
